@@ -4,7 +4,7 @@ import Process._
 class MyAndroidProject(info: ProjectInfo) extends AndroidProject(info) {
   override def androidPlatformName = "android-$platform$"
 
-  def nativeLibsPath = mainSourcePath / "libs"
+  def nativeLibsPath = "lib"
   override def packageTask(signPackage: Boolean) = execTask {<x>
     {apkbuilderPath.absolutePath}
     {packageApkPath.absolutePath}
