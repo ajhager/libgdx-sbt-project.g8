@@ -1,5 +1,5 @@
 import sbt._
 
 class Plugins(info: ProjectInfo) extends PluginDefinition(info) {
-  // remove this file if your template doesn't have default plugins
+  val android = "org.scala-tools.sbt" % "sbt-android-plugin" % "0.5.1"
 }
