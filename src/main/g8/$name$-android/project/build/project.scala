@@ -2,7 +2,7 @@ import sbt._
 import Process._
 
 class MyAndroidProject(info: ProjectInfo) extends AndroidProject(info) {
-  override def androidPlatformName = "android-11"
+  override def androidPlatformName = "android-$platform$"
 
   def nativeLibsPath = mainSourcePath / "libs"
   override def packageTask(signPackage: Boolean) = execTask {<x>
