@@ -2,7 +2,6 @@ import sbt._
 import Process._
 import scala.io.Source
 import java.net.URL
-import java.util.regex.Pattern
 import java.io.{ FileNotFoundException, FileOutputStream }
 
 class MyAndroidProject(info: ProjectInfo) extends AndroidProject(info) with MarketPublish {
@@ -49,8 +48,10 @@ class MyAndroidProject(info: ProjectInfo) extends AndroidProject(info) with Mark
         // Extract only needed jars.
         val filter = new ExactFilter("gdx.jar") |
                      new ExactFilter("gdx-backend-android.jar") |
-                     new ExactFilter("armeabi") |
-                     new ExactFilter("armeabi-v7a")
+                     new ExactFilter("armeabi/libgdx.so") |
+                     new ExactFilter("armeabi/libandroidgl20.so") |
+                     new ExactFilter("armeabi-v7a/libgdx.so") |
+                     new ExactFilter("armeabi-v7a/libandroidgl20.so")
         
         FileUtilities.unzip(zipFile, dest, filter, log)
 
