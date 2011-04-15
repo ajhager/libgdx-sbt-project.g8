@@ -47,7 +47,7 @@ class MyProject(info: ProjectInfo) extends DefaultProject(info) {
         log.info("Complete")
         None
     } 
-  } describedAs "Pulls libgdx dependency from nightly build."
+  } describedAs "Pulls libgdx desktop dependencies from nightly build."
 
   override def updateAction = 
     super.updateAction dependsOn updateGdx
