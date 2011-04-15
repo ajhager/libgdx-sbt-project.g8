@@ -4,7 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.widget.TextView
 
-class $name$Android extends Activity {
+class Main extends Activity {
   override def onCreate(savedInstanceState: Bundle) {
     super.onCreate(savedInstanceState)
     setContentView(new TextView(this) {
