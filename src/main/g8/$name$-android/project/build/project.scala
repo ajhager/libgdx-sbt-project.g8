@@ -9,14 +9,15 @@ class MyAndroidProject(info: ProjectInfo) extends AndroidProject(info) with Mark
   override def androidPlatformName = "android-$android_api_level$"
   override val keyalias  = "change-me"
 
-  def nativeLibsPath = "lib"
+  def mainDependencyPath = mainSourcePath / "libs"
+
   override def packageTask(signPackage: Boolean) = execTask {<x>
     {apkbuilderPath.absolutePath}
     {packageApkPath.absolutePath}
     {if (signPackage) "" else "-u"}
     -z {resourcesApkPath.absolutePath}
     -f {classesDexPath.absolutePath}
-    -nf {nativeLibsPath.absolutePath }
+    -nf {dependencyPath.absolutePath }
     {proguardInJars.get.map(" -rj " + _.absolutePath)}
   </x>} dependsOn(cleanApk)
 
@@ -38,7 +39,7 @@ class MyAndroidProject(info: ProjectInfo) extends AndroidProject(info) with Mark
         log.info("Pulling %s" format(gdxName))
         log.warn("This may take a few minutes...")
         val zip = "%s.zip" format(gdxName) 
-        val dest = dependencyPath / gdxName
+        val dest = dependencyPath
         
         // Unzip the file.
         val zipFile = new java.io.File(zip)
