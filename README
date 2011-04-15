@@ -1,1 +1,8 @@
 libgdx-sbt-project.g8
+
+TODO
+  Get android project working
+    Make sure sources can be shared
+    Make sure data can be shared
+    Add in managed dependencies for libgdx
+  Add g8 options for backends/ libgdx versions
