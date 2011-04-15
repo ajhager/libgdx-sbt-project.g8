@@ -1,4 +1,4 @@
-package com.ajhager.$name$
+package $package$
 
 //import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 
