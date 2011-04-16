@@ -6,3 +6,4 @@ TODO
   Fix up managed dependency time checking
   Add g8 options for backends/ libgdx versions
   Add in desktop packaging and deployment
+  Create webstart deployment task
