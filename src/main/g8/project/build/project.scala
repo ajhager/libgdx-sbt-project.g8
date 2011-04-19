@@ -52,8 +52,8 @@ class GameProject(info: ProjectInfo) extends ParentProject(info) {
     
     val desktopDest = desktop.dependencyPath
     val desktopFilter = new ExactFilter("gdx-natives.jar") |
-    new ExactFilter("gdx-backend-lwjgl.jar") |
-    new ExactFilter("gdx-backend-lwjgl-natives.jar")
+    new ExactFilter("gdx-backend-$desktop_backend$.jar") |
+    new ExactFilter("gdx-backend-$desktop_backend$-natives.jar")
     FileUtilities.unzip(zipFile, desktopDest, desktopFilter, log)
     
     val androidDest = android.dependencyPath
