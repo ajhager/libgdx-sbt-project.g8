@@ -1,9 +1,7 @@
 libgdx-sbt-project.g8
 
 TODO
-  Make sure sources can be shared
-  Make sure data can be shared
-  Fix up managed dependency time checking
-  Add g8 options for backends/ libgdx versions
-  Add in desktop packaging and deployment
-  Create webstart deployment task
+  Add sbt options for backend and libgdx versions
+  Add desktop packaging and deployment
+  Add webstart deployment
+  Add android signing
