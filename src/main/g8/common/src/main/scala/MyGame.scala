@@ -4,7 +4,7 @@ import com.badlogic.gdx.ApplicationListener
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL10
 
-class Shared extends ApplicationListener {
+class MyGame extends ApplicationListener {
   var fps: FpsDisplay = null
 
   override def create() {
