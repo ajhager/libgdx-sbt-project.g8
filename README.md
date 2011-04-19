@@ -9,7 +9,7 @@ Read g8's [readme](http://github.com/n8han/giter8#readme) for more information.
 
 Then, in your favorite shell, type the command:
 
-    g8 ajhager/libgdx-sbt-project
+    $ g8 ajhager/libgdx-sbt-project
 
 This will prompt you for a few parameters. Type in the options you would like to change, or just press enter to accept the default. For example, if I wanted to create the next greatest Asteroids clone:
 
@@ -21,8 +21,8 @@ This will prompt you for a few parameters. Type in the options you would like to
 
 You can see that I created a new package, com.ajhager.hageroids, for my new game Hageroids. I just pressed enter to accept the lastest android api level, scala version, and sbt version. Finally, you just need to update your project with the needed libraries:
 
-    cd Hageroids
-    sbt update
+    $ cd hageroids
+    $ sbt update
 
 This will download scala, sbt, and the libgdx nightly build. Soon you will be able to choose any version of libgdx you'd like. For now, every time you update in the main directory, the bleeding edge libraries will be fetched and installed for your project.
 
