@@ -1,7 +1,0 @@
-libgdx-sbt-project.g8
-
-TODO
-  Add sbt options for backend and libgdx versions
-  Add desktop packaging and deployment
-  Add webstart deployment
-  Add android signing
