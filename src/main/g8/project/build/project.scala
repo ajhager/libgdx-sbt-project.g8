@@ -30,10 +30,20 @@ class GameProject(info: ProjectInfo) extends ParentProject(info) {
 
   override def updateAction = super.updateAction dependsOn updateGdx
   lazy val updateGdx = task {
+    val repo = "$libgdx_version$"
+    var baseRepo = ""
+    var gdxName = "" 
     // Declare the url and file name.
-    val baseRepo = "http://libgdx.l33tlabs.org/"
-    val gdxName = "libgdx-nightly-%s" format {
-      (new java.text.SimpleDateFormat("yyyyMMdd")).format(new java.util.Date())
+    if (repo == "nightly") {
+      baseRepo = "http://libgdx.l33tlabs.org/"
+      gdxName = "libgdx-nightly-%s" format {
+        (new java.text.SimpleDateFormat("yyyyMMdd")).format(new java.util.Date())
+      }
+      None
+    } else {
+      baseRepo = "http://libgdx.googlecode.com/files/"
+      gdxName = "libgdx-%s" format(repo)
+      None
     }
 
     // Fetch the file.
