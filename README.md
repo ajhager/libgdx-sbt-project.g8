@@ -27,7 +27,7 @@ Finally, you just need to update your project with the needed libraries:
     $ cd hageroids
     $ sbt update
 
-This will download scala, sbt, and libgdx.
+This will download scala, sbt, and libgdx. If you are using the *nightly* build of libgdx, running 'sbt update' in the main project directory will update to the latest build.
 
 ## Where to go from here
 
