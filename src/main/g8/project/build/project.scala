@@ -10,6 +10,7 @@ class GameProject(info: ProjectInfo) extends ParentProject(info) {
 
   class Desktop(info: ProjectInfo) extends DefaultProject(info) {
     override def fork = forkRun
+    override def mainScalaSourcePath = "src" / "$desktop_backend$"
   }
   
   class Android(info: ProjectInfo) extends AndroidProject(info) {
