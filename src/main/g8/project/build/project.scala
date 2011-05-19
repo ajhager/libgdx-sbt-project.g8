@@ -4,28 +4,33 @@ import java.io._
 import java.net.URL
 
 class GameProject(info: ProjectInfo) extends ParentProject(info) {
-  lazy val common = project("common", "Common", new DefaultProject(_))
+  lazy val common = project("common", "Common", new Common(_))
   lazy val desktop = project("desktop", "Desktop", new Desktop(_), common)
   lazy val android = project("android", "Android", new Android(_), common)
 
+  class Common(info: ProjectInfo) extends DefaultProject(info) {
+    override def mainScalaSourcePath = "src"
+    override def mainResourcesPath = "data"
+  }
+  
   class Desktop(info: ProjectInfo) extends DefaultProject(info) {
     override def fork = forkRun
     override def mainScalaSourcePath = "src" / "$desktop_backend$"
   }
   
-  class Android(info: ProjectInfo) extends AndroidProject(info) {
+  class Android(info: ProjectInfo) extends AndroidProject(info) with MarketPublish {
     override def androidPlatformName = "android-$android_api_level$"
-    override def mainAssetsPath = common.mainSourcePath / "resources"
-
-    override def packageTask(signPackage: Boolean) = execTask {<x>
-      {apkbuilderPath.absolutePath}
-      {packageApkPath.absolutePath}
-      {if (signPackage) "" else "-u"}
-      -z {resourcesApkPath.absolutePath}
-      -f {classesDexPath.absolutePath}
-      -nf {dependencyPath.absolutePath }
-      {proguardInJars.get.map(" -rj " + _.absolutePath)}
-    </x>} dependsOn(cleanApk)
+    override def mainAssetsPath = common.mainResourcesPath
+    val keyalias  = "change-me"
+    // override def packageTask(signPackage: Boolean) = execTask {<x>
+    //   {apkbuilderPath.absolutePath}
+    //   {packageApkPath.absolutePath}
+    //   {if (signPackage) "" else "-u"}
+    //   -z {resourcesApkPath.absolutePath}
+    //   -f {classesDexPath.absolutePath}
+    //   -nf {dependencyPath.absolutePath }
+    //   {proguardInJars.get.map(" -rj " + _.absolutePath)}
+    // </x>} dependsOn(cleanApk)
   }
 
   override def updateAction = super.updateAction dependsOn updateGdx
