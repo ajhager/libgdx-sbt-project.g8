@@ -22,15 +22,15 @@ class GameProject(info: ProjectInfo) extends ParentProject(info) {
     override def androidPlatformName = "android-$android_api_level$"
     override def mainAssetsPath = common.mainResourcesPath
     val keyalias  = "change-me"
-    // override def packageTask(signPackage: Boolean) = execTask {<x>
-    //   {apkbuilderPath.absolutePath}
-    //   {packageApkPath.absolutePath}
-    //   {if (signPackage) "" else "-u"}
-    //   -z {resourcesApkPath.absolutePath}
-    //   -f {classesDexPath.absolutePath}
-    //   -nf {dependencyPath.absolutePath }
-    //   {proguardInJars.get.map(" -rj " + _.absolutePath)}
-    // </x>} dependsOn(cleanApk)
+    override def packageTask(signPackage: Boolean) = execTask {<x>
+      {apkbuilderPath.absolutePath}
+      {packageApkPath.absolutePath}
+      {if (signPackage) "" else "-u"}
+      -z {resourcesApkPath.absolutePath}
+      -f {classesDexPath.absolutePath}
+      -nf {dependencyPath.absolutePath }
+      {proguardInJars.get.map(" -rj " + _.absolutePath)}
+    </x>} dependsOn(cleanApk)
   }
 
   override def updateAction = super.updateAction dependsOn updateGdx
