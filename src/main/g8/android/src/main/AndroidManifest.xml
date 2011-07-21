@@ -4,7 +4,7 @@
       android:versionCode="1"
       android:versionName="1.0">
     <uses-sdk android:targetSdkVersion="$android_api_level$"
-              android:minSdkVersion="$android_api_level$"/>
+              android:minSdkVersion="7"/>
     <application android:icon="@drawable/android:star_big_on" android:label="@string/app_name">
         <activity android:name=".Main"
                   android:label="@string/app_name">
