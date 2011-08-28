@@ -11,18 +11,11 @@ Then, in your favorite shell, type the command:
 
     $ g8 ajhager/libgdx-sbt-project
 
-After answering a few simple questions, cd into your project directory and type:
+After filling in some information about your project, you can start placing your game's source files and assets in common/src/main/scala and common/src/main/resources, respectively.
 
-    $ sbt update
-    $ sbt update-gdx
+## Managing your project
 
-Put your game's source files and assets in common/src/main/scala and common/src/main/resources, respectively.
-
-## Where to go from here
-
-You now have a few commands for managing your project.
-
-Update to the lastest libgdx nightlies:
+Update to the lastest libgdx nightlies (You will need to do this at least once):
 
    $ sbt update-gdx 
 
@@ -34,4 +27,4 @@ Run the android project on a device:
   
    $ sbt "project android" start-device
 
-Then visit [android-plugin](https://github.com/jberkel/android-plugin) for a more in-depth guide to android configuration and usage.
+Visit [android-plugin](https://github.com/jberkel/android-plugin) for a more in-depth guide to android configuration and usage.
