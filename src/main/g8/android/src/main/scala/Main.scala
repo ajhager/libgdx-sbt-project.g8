@@ -1,11 +1,18 @@
-package $package$
+package com.ajhager.blah
 
 import android.os.Bundle
-import com.badlogic.gdx.backends.android.AndroidApplication
+
+import com.badlogic.gdx.backends.android._
 
 class Main extends AndroidApplication {
   override def onCreate(savedInstanceState: Bundle) {
     super.onCreate(savedInstanceState)
-    initialize(new MyGame(), $use_gl2$)
+    val config = new AndroidApplicationConfiguration()
+    config.useAccelerometer = false
+    config.useCompass = false
+    config.useWakelock = true
+    config.depth = 0
+    config.useGL20 = true
+    initialize(new MyGame(), config)
   }
 }
