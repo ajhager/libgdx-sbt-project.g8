@@ -12,7 +12,7 @@ class Main extends AndroidApplication {
     config.useCompass = false
     config.useWakelock = true
     config.depth = 0
-    config.useGL20 = use_gl2
+    config.useGL20 = $use_gl2$
     initialize(new MyGame(), config)
   }
 }
