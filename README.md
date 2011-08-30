@@ -1,6 +1,6 @@
 # libgdx sbt project
 
-A [g8](http://github.com/n8han/giter8) template to get up and running with Scala and [libgdx](http://code.google.com/p/libgdx/).
+A [g8](http://github.com/n8han/giter8) template to get up and running with Scala and [libgdx](http://code.google.com/p/libgdx/) using [sbt](https://github.com/harrah/xsbt) 0.10.
 
 ## Setting up a new project
 
