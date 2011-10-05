@@ -1,6 +1,6 @@
 # libgdx sbt project
 
-A [g8](http://github.com/n8han/giter8) template to get up and running with Scala and [libgdx](http://code.google.com/p/libgdx/) using [sbt](https://github.com/harrah/xsbt) 0.10.
+A [g8](http://github.com/n8han/giter8) template to get up and running with Scala and [libgdx](http://code.google.com/p/libgdx/) using [sbt](https://github.com/harrah/xsbt) 0.11.
 
 ## Setting up a new project
 
@@ -25,6 +25,10 @@ Run the desktop project:
 
 Run the android project on a device:
   
-    $ sbt "project android" start-device
+    $ sbt "project android" android:package-debug android:start-device
 
 Visit [android-plugin](https://github.com/jberkel/android-plugin) for a more in-depth guide to android configuration and usage.
+
+## Contributors
+
+JamilH: sbt 0.11 support

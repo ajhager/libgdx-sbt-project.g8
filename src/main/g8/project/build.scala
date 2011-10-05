@@ -17,10 +17,11 @@ object Settings {
   lazy val android = Settings.common ++
     AndroidProject.androidSettings ++
     AndroidMarketPublish.settings ++ Seq (
-      platformName in Android := "android-12",
+      platformName in Android := "android-$api_level$",
       keyalias in Android := "change-me",
       mainAssetsPath in Android := file("common/src/main/resources"),
-      unmanagedBase := file("android/src/main/libs")
+      unmanagedBase <<= baseDirectory( _ /"src/main/libs" ),
+      unmanagedClasspath in Runtime <+= (baseDirectory) map { bd => Attributed.blank(bd / "src/main/libs") }
     )
 
   val updateLibgdx = TaskKey[Unit]("update-gdx", "Updates libgdx")
@@ -59,7 +60,8 @@ object Settings {
     new ExactFilter("armeabi/libgdx.so") |
     new ExactFilter("armeabi/libandroidgl20.so") |
     new ExactFilter("armeabi-v7a/libgdx.so") |
-    new ExactFilter("armeabi-v7a/libandroidgl20.so")
+    new ExactFilter("armeabi-v7a/libandroidgl20.so") |
+    commonFilter
     IO.unzip(zipFile, androidDest, androidFilter)
 
     // Destroy the file.
@@ -87,4 +89,3 @@ object LibgdxBuild extends Build {
     settings = Settings.android
   ) dependsOn common
 }
-
