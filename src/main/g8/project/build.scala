@@ -32,7 +32,7 @@ object Settings {
     import java.net.URL
     
     // Declare names
-    val baseUrl = "http://libgdx.l33tlabs.org/"
+    val baseUrl = "http://libgdx.badlogicgames.com/nightlies"
     val gdxName = "libgdx-nightly-latest"
 
     // Fetch the file.
