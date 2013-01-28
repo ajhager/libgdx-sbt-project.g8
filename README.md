@@ -1,6 +1,6 @@
 # libgdx sbt project
 
-A [g8](http://github.com/n8han/giter8) template to get up and running with Scala and [libgdx](http://code.google.com/p/libgdx/) using [sbt](https://github.com/harrah/xsbt) 0.12.
+Configure and generate a Scala project for [libgdx](http://libgdx.badlogicgames.com/) using [g8](http://github.com/n8han/giter8) and [sbt](https://github.com/sbt/sbt)
 
 ## Setting up a new project
 
@@ -31,6 +31,8 @@ Visit [android-plugin](https://github.com/jberkel/android-plugin) for a more in-
 
 ## Using with Intellij
 
-Make sure you have the Intellij 12 and the latest Scala plugin, then type:
+Make sure you have Intellij 12 and the latest Scala plugin, then type:
 
     $ sbt "project common" gen-idea
+
+You can now open the project, then create an "Android Application" build config using the android module and an "Application" build config using the desktop module.
