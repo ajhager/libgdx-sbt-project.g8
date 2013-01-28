@@ -1,7 +1,8 @@
 import sbt._
 
 import Keys._
-import AndroidKeys._
+import org.scalasbt.androidplugin._
+import org.scalasbt.androidplugin.AndroidKeys._
 
 object Settings {
   lazy val common = Defaults.defaultSettings ++ Seq (
@@ -21,7 +22,7 @@ object Settings {
       keyalias in Android := "change-me",
       mainAssetsPath in Android := file("common/src/main/resources"),
       unmanagedBase <<= baseDirectory( _ /"src/main/libs" ),
-      unmanagedClasspath in Runtime <+= (baseDirectory) map { bd => Attributed.blank(bd / "src/main/libs") }
+      proguardOption in Android := "-keep class com.badlogic.gdx.backends.android.** { *; }"
     )
 
   val updateLibgdx = TaskKey[Unit]("update-gdx", "Updates libgdx")
@@ -44,29 +45,30 @@ object Settings {
     IO.download(url, zipFile)
 
     // Extract jars into their respective lib folders.
+    s.log.info("Extracting common libs")
     val commonDest = file("common/lib")
     val commonFilter = new ExactFilter("gdx.jar")
     IO.unzip(zipFile, commonDest, commonFilter)
 
+    s.log.info("Extracting desktop libs")
     val desktopDest = file("desktop/lib")
     val desktopFilter = new ExactFilter("gdx-natives.jar") |
     new ExactFilter("gdx-backend-lwjgl.jar") |
-    new ExactFilter("gdx-backend-lwjgl-natives.jar") |
-    new ExactFilter("gdx-tools.jar")
+    new ExactFilter("gdx-backend-lwjgl-natives.jar")
     IO.unzip(zipFile, desktopDest, desktopFilter)
 
+    s.log.info("Extracting android libs")
     val androidDest = file("android/src/main/libs")
     val androidFilter = new ExactFilter("gdx-backend-android.jar") |
     new ExactFilter("armeabi/libgdx.so") |
     new ExactFilter("armeabi/libandroidgl20.so") |
     new ExactFilter("armeabi-v7a/libgdx.so") |
-    new ExactFilter("armeabi-v7a/libandroidgl20.so") |
-    commonFilter
+    new ExactFilter("armeabi-v7a/libandroidgl20.so")
     IO.unzip(zipFile, androidDest, androidFilter)
 
     // Destroy the file.
     zipFile.delete
-    s.log.info("Complete")
+    s.log.info("Update complete")
   }
 }
 

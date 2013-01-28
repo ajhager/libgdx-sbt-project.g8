@@ -1,7 +1,6 @@
 package $package$
 
 import android.os.Bundle
-
 import com.badlogic.gdx.backends.android._
 
 class Main extends AndroidApplication {
@@ -11,8 +10,7 @@ class Main extends AndroidApplication {
     config.useAccelerometer = false
     config.useCompass = false
     config.useWakelock = true
-    config.depth = 0
-    config.useGL20 = $use_gl2$
+    config.useGL20 = true
     initialize(new MyGame(), config)
   }
 }
