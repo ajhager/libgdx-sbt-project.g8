@@ -1,6 +1,6 @@
 package $package$
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication._
+import com.badlogic.gdx.backends.lwjgl._
 
 object Main {
   def main(args: Array[String]): Unit = {
