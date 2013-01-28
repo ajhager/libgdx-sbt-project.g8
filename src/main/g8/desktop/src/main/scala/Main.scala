@@ -9,6 +9,6 @@ object Main {
     cfg.height = 480
     cfg.width = 320
     cfg.useGL20 = true
-    new LwjglApplication(new MyLibgdxGame(), cfg)
+    new LwjglApplication(new MyGame(), cfg)
   }
 }
