@@ -57,6 +57,11 @@ object Settings {
     new ExactFilter("gdx-backend-lwjgl-natives.jar")
     IO.unzip(zipFile, desktopDest, desktopFilter)
 
+    s.log.info("Extracting desktop libs")
+    val iosDest = file("ios/libs")
+    val iosFilter = new PatternFilter("ios/*")
+    IO.unzip(zipFile, iosDest, iosFilter)
+
     s.log.info("Extracting android libs")
     val androidDest = file("android/src/main/libs")
     val androidFilter = new ExactFilter("gdx-backend-android.jar") |
