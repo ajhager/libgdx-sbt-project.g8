@@ -60,7 +60,7 @@ object Settings {
 
     s.log.info("Extracting desktop libs")
     val iosDest = file("ios/libs")
-    val iosFilter = new PatternFilter(Pattern.compile("ios"))
+    val iosFilter = new GlobFilter("ios/*")
     IO.unzip(zipFile, iosDest, iosFilter)
 
     s.log.info("Extracting android libs")
