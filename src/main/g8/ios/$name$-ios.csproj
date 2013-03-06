@@ -154,8 +154,8 @@
     <Reference Include="libObjectAL">
       <HintPath>libs\ios\objectal\libObjectAL.dll</HintPath>
     </Reference>
-    <Reference Include="$name$">
-      <HintPath>target/$name$.dll</HintPath>
+    <Reference Include="game.dll">
+      <HintPath>target\game.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
