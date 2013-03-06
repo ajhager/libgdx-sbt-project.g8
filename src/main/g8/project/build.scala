@@ -31,6 +31,7 @@ object Settings {
     import Process._
     import java.io._
     import java.net.URL
+    import java.util.regex.Pattern
     
     // Declare names
     val baseUrl = "http://libgdx.badlogicgames.com/nightlies"
@@ -59,7 +60,7 @@ object Settings {
 
     s.log.info("Extracting desktop libs")
     val iosDest = file("ios/libs")
-    val iosFilter = new PatternFilter("ios/*")
+    val iosFilter = new PatternFilter(Pattern.compile("ios"))
     IO.unzip(zipFile, iosDest, iosFilter)
 
     s.log.info("Extracting android libs")
