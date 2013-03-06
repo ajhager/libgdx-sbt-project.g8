@@ -7,11 +7,13 @@
   <target name="compile">
     <delete dir="target"/>
     <mkdir dir="target"/>
-    <exec executable="sbt">
+    <exec executable="/usr/local/bin/sbt"
+          dir="..">
+      <env key="ANDROID_SDK_HOME" value=""/>
       <arg line="&quot;project common&quot; compile"/>
     </exec>
-    <copy todir="target">
-      <fileset dir="../common/target/**/*.class"/>
+    <copy todir="target" flatten="true">
+      <fileset dir="../common/target" includes="**/*.class"/>
     </copy>
   </target>
   
