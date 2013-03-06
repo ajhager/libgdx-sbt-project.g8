@@ -17,20 +17,20 @@
   
   <target name="convert">
     <exec executable="mono">
-      <arg value="${IKVM_HOME}/bin/ikvmc.exe"/>
+      <arg value="\${IKVM_HOME}/bin/ikvmc.exe"/>
       <arg value="-nostdlib"/>
       <arg value="-target:library"/>
       <arg value="-debug"/>
-      <arg value="-srcpath:${SRC}"/>
-      <arg value="-out:${OUT}"/>
-      <arg value="-r:${MONO_HOME}/mscorlib.dll"/>
-      <arg value="-r:${MONO_HOME}/System.dll"/>
-      <arg value="-r:${MONO_HOME}/System.Core.dll"/>
-      <arg value="-r:${MONO_HOME}/System.Data.dll"/>
-      <arg value="-r:${MONO_HOME}/OpenTK.dll"/>
-      <arg value="-r:${MONO_HOME}/monotouch.dll"/>
-      <arg value="-r:${MONO_HOME}/Mono.Data.Sqlite.dll"/>
-      <arg line="${IN}"/>
+      <arg value="-srcpath:\${SRC}"/>
+      <arg value="-out:\${OUT}"/>
+      <arg value="-r:\${MONO_HOME}/mscorlib.dll"/>
+      <arg value="-r:\${MONO_HOME}/System.dll"/>
+      <arg value="-r:\${MONO_HOME}/System.Core.dll"/>
+      <arg value="-r:\${MONO_HOME}/System.Data.dll"/>
+      <arg value="-r:\${MONO_HOME}/OpenTK.dll"/>
+      <arg value="-r:\${MONO_HOME}/monotouch.dll"/>
+      <arg value="-r:\${MONO_HOME}/Mono.Data.Sqlite.dll"/>
+      <arg line="\${IN}"/>
     </exec>
   </target>
 </project>
