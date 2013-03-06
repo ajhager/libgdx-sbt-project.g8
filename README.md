@@ -29,6 +29,12 @@ Run the android project on a device:
 
 Visit [android-plugin](https://github.com/jberkel/android-plugin) for a more in-depth guide to android configuration and usage.
 
+## iOS Support
+
+Open the ios solution in Xamarin Studio and build.
+
+Every time you make changes to your scala files, you will need to clean and build since Xamarin cannot pick up changes to files it does not track.
+
 ## Using with Intellij
 
 Make sure you have Intellij 12 and the latest Scala plugin, then type:
