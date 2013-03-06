@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
+    <Configuration Condition=" '\$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '\$(Platform)' == '' ">iPhoneSimulator</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E9434FE8-789E-4EF9-AD1E-40F73DBA497B}</ProjectGuid>
@@ -11,7 +11,7 @@
     <RootNamespace>iosgame</RootNamespace>
     <AssemblyName>iosgame</AssemblyName>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
+  <PropertyGroup Condition=" '\$(Configuration)|\$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
@@ -23,16 +23,16 @@
     <MtouchDebug>True</MtouchDebug>
     <MtouchProfiling>True</MtouchProfiling>
     <MtouchLink>None</MtouchLink>
-    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir}/libs/ios -L${ProjectDir}/libs/ios/ikvm/bin -likvm-natives -lgdx -force_load ${ProjectDir}/libs/ios/libgdx.a -force_load ${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a"</MtouchExtraArgs>
+    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L\${ProjectDir}/libs/ios -L\${ProjectDir}/libs/ios/ikvm/bin -likvm-natives -lgdx -force_load \${ProjectDir}/libs/ios/libgdx.a -force_load \${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a"</MtouchExtraArgs>
     <MtouchI18n>west</MtouchI18n>
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -v" workingdir="${ProjectDir}" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -v" workingdir="\${ProjectDir}" />
       </CustomCommands>
     </CustomCommands>
     <MtouchArch>ARMv7</MtouchArch>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
+  <PropertyGroup Condition=" '\$(Configuration)|\$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
     <Optimize>True</Optimize>
     <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
@@ -40,16 +40,16 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <MtouchLink>None</MtouchLink>
-    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir}/libs/ios -L${ProjectDir}/libs/ios/ikvm/bin -likvm-natives -lgdx -force_load ${ProjectDir}/libs/ios/libgdx.a -force_load ${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a"</MtouchExtraArgs>
+    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L\${ProjectDir}/libs/ios -L\${ProjectDir}/libs/ios/ikvm/bin -likvm-natives -lgdx -force_load \${ProjectDir}/libs/ios/libgdx.a -force_load \${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a"</MtouchExtraArgs>
     <MtouchI18n>west</MtouchI18n>
     <MtouchUseLlvm>True</MtouchUseLlvm>
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -v" workingdir="${ProjectDir}" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -v" workingdir="\${ProjectDir}" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
+  <PropertyGroup Condition=" '\$(Configuration)|\$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
@@ -63,15 +63,15 @@
     <MtouchProfiling>True</MtouchProfiling>
     <MtouchArch>ARMv7</MtouchArch>
     <MtouchI18n>west</MtouchI18n>
-    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir}/libs/ios -L${ProjectDir}/libs/ios/ikvm/bin -likvm-natives -lgdx -force_load ${ProjectDir}/libs/ios/libgdx.a -force_load ${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a"</MtouchExtraArgs>
+    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L\${ProjectDir}/libs/ios -L\${ProjectDir}/libs/ios/ikvm/bin -likvm-natives -lgdx -force_load \${ProjectDir}/libs/ios/libgdx.a -force_load \${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a"</MtouchExtraArgs>
     <IpaPackageName />
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -v" workingdir="${ProjectDir}" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -v" workingdir="\${ProjectDir}" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
+  <PropertyGroup Condition=" '\$(Configuration)|\$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
     <Optimize>True</Optimize>
     <OutputPath>bin\iPhone\Release</OutputPath>
@@ -83,14 +83,14 @@
     <MtouchI18n>west</MtouchI18n>
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -v" workingdir="${ProjectDir}" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -v" workingdir="\${ProjectDir}" />
       </CustomCommands>
     </CustomCommands>
     <MtouchArch>ARMv7</MtouchArch>
-    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir}/libs/ios -L${ProjectDir}/libs/ios/ikvm/bin -likvm-natives -lgdx -force_load ${ProjectDir}/libs/ios/libgdx.a -force_load ${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a"</MtouchExtraArgs>
+    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L\${ProjectDir}/libs/ios -L\${ProjectDir}/libs/ios/ikvm/bin -likvm-natives -lgdx -force_load \${ProjectDir}/libs/ios/libgdx.a -force_load \${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a"</MtouchExtraArgs>
     <MtouchUseSGen>True</MtouchUseSGen>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
+  <PropertyGroup Condition=" '\$(Configuration)|\$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
     <Optimize>True</Optimize>
     <OutputPath>bin\iPhone\Ad-Hoc</OutputPath>
@@ -101,7 +101,7 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
     <MtouchI18n />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
+  <PropertyGroup Condition=" '\$(Configuration)|\$(Platform)' == 'AppStore|iPhone' ">
     <DebugType>none</DebugType>
     <Optimize>True</Optimize>
     <OutputPath>bin\iPhone\AppStore</OutputPath>
@@ -166,8 +166,5 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="data\" />
-  </ItemGroup>
+  <Import Project="\$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
