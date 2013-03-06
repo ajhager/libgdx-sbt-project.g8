@@ -35,6 +35,8 @@ Open the ios solution in Xamarin Studio and build.
 
 Every time you make changes to your scala files, you will need to clean and build since Xamarin cannot pick up changes to files it does not track.
 
+For the moment, you will need to apply a work around for Xamarin's use of pngcrush. See the badlogic [blog post](http://www.badlogicgames.com/wordpress/?p=2859) for details.
+
 ## Using with Intellij
 
 Make sure you have Intellij 12 and the latest Scala plugin, then type:
