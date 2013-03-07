@@ -25,7 +25,7 @@ Run the desktop project:
 
 Run the android project on a device:
   
-    $ sbt "project android" android:package-debug android:start-device
+    $ sbt android:start-device
 
 Visit [android-plugin](https://github.com/jberkel/android-plugin) for a more in-depth guide to android configuration and usage.
 
