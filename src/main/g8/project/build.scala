@@ -20,7 +20,9 @@ object Settings {
     AndroidMarketPublish.settings ++ Seq (
       platformName in Android := "android-$api_level$",
       keyalias in Android := "change-me",
-      mainAssetsPath in Android := file("common/src/main/resources"),
+      mainAssetsPath in Android := file("assets"),
+      mainResPath in Android := file("res"),
+      manifestPath in Android := Seq(file("AndroidManifest.xml")),
       unmanagedBase <<= baseDirectory( _ /"src/main/libs" ),
       proguardOption in Android := "-keep class com.badlogic.gdx.backends.android.** { *; }"
     )
