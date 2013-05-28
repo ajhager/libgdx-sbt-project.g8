@@ -31,6 +31,7 @@
       </CustomCommands>
     </CustomCommands>
     <MtouchArch>ARMv7</MtouchArch>
+    <OptimizePNGs>false</OptimizePNGs>
   </PropertyGroup>
   <PropertyGroup Condition=" '\$(Configuration)|\$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -48,6 +49,7 @@
         <Command type="BeforeBuild" command="ant -f convert.xml compile convert -v" workingdir="\${ProjectDir}" />
       </CustomCommands>
     </CustomCommands>
+    <OptimizePNGs>false</OptimizePNGs>
   </PropertyGroup>
   <PropertyGroup Condition=" '\$(Configuration)|\$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>True</DebugSymbols>
@@ -70,6 +72,7 @@
         <Command type="BeforeBuild" command="ant -f convert.xml compile convert -v" workingdir="\${ProjectDir}" />
       </CustomCommands>
     </CustomCommands>
+    <OptimizePNGs>false</OptimizePNGs>
   </PropertyGroup>
   <PropertyGroup Condition=" '\$(Configuration)|\$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -89,6 +92,7 @@
     <MtouchArch>ARMv7</MtouchArch>
     <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L\${ProjectDir}/libs/ios -L\${ProjectDir}/libs/ios/ikvm/bin -likvm-natives -lgdx -force_load \${ProjectDir}/libs/ios/libgdx.a -force_load \${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a"</MtouchExtraArgs>
     <MtouchUseSGen>True</MtouchUseSGen>
+    <OptimizePNGs>false</OptimizePNGs>
   </PropertyGroup>
   <PropertyGroup Condition=" '\$(Configuration)|\$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
@@ -100,6 +104,7 @@
     <BuildIpa>True</BuildIpa>
     <CodesignKey>iPhone Distribution</CodesignKey>
     <MtouchI18n />
+    <OptimizePNGs>false</OptimizePNGs>
   </PropertyGroup>
   <PropertyGroup Condition=" '\$(Configuration)|\$(Platform)' == 'AppStore|iPhone' ">
     <DebugType>none</DebugType>
@@ -109,6 +114,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <CodesignKey>iPhone Distribution</CodesignKey>
+    <OptimizePNGs>false</OptimizePNGs>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

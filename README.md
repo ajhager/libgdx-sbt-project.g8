@@ -29,13 +29,11 @@ Run the android project on a device:
 
 Visit [android-plugin](https://github.com/jberkel/android-plugin) for a more in-depth guide to android configuration and usage.
 
-## iOS Support
+## iOS Support (not currently working)
 
 Open the ios solution in Xamarin Studio and build.
 
 Every time you make changes to your scala files, you will need to clean and build since Xamarin cannot pick up changes to files it does not track.
-
-For the moment, you will need to apply a work around for Xamarin's use of pngcrush. See the badlogic [blog post](http://www.badlogicgames.com/wordpress/?p=2859) for details.
 
 ## Using with Intellij
 
