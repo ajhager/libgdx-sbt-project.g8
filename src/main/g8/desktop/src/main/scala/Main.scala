@@ -8,5 +8,5 @@ object Main extends App {
     cfg.height = 480
     cfg.width = 320
     cfg.useGL20 = true
-    new LwjglApplication(new MyGame(), cfg)
+    new LwjglApplication(new $main_class$(), cfg)
 }
