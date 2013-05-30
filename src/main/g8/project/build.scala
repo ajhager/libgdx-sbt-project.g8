@@ -8,6 +8,7 @@ object Settings {
   lazy val common = Defaults.defaultSettings ++ Seq (
     version := "0.1",
     scalaVersion := "$scala_version$",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "$scalatest_version$" % "test",
     updateLibgdxTask
    )
 
