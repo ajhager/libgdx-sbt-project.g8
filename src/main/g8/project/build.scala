@@ -104,4 +104,12 @@ object LibgdxBuild extends Build {
     file("."),
     settings = Settings.common :+ Settings.updateLibgdxTask
   ) aggregate(common, desktop, android)
+
+  lazy val tests = Project (
+    "android-tests",
+    file("android-tests"),
+    settings = Settings.android ++
+               AndroidTest.androidSettings ++
+               Seq ( name := "$name$Tests" )
+  ) dependsOn android
 }
