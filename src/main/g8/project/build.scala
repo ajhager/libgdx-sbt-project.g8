@@ -8,8 +8,7 @@ object Settings {
   lazy val common = Defaults.defaultSettings ++ Seq (
     version := "0.1",
     scalaVersion := "$scala_version$",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "$scalatest_version$" % "test",
-    updateLibgdxTask
+    libraryDependencies += "org.scalatest" %% "scalatest" % "$scalatest_version$" % "test"
    )
 
   lazy val desktop = Settings.common ++ Seq (
@@ -92,11 +91,17 @@ object LibgdxBuild extends Build {
     "desktop",
     file("desktop"),
     settings = Settings.desktop
-  ) dependsOn common
+  ) dependsOn(common % "compile->compile;test->test")
 
   lazy val android = Project (
     "android",
     file("android"),
     settings = Settings.android
-  ) dependsOn common
+  ) dependsOn(common % "compile->compile;test->test")
+
+  lazy val all = Project (
+    "all-platforms",
+    file("."),
+    settings = Settings.common :+ Settings.updateLibgdxTask
+  ) aggregate(common, desktop, android)
 }
