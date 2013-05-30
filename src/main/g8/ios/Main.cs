@@ -13,7 +13,7 @@ namespace $package$
 	{
 		[Register ("AppDelegate")]
 		public partial class AppDelegate : IOSApplication {
-			public AppDelegate(): base(new MyGame(), getConfig()) {
+			public AppDelegate(): base(new $main_class$(), getConfig()) {
 
 			}
 

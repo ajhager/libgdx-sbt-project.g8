@@ -22,7 +22,7 @@ object Settings {
       keyalias in Android := "change-me",
       mainAssetsPath in Android := file("common/src/main/resources"),
       unmanagedBase <<= baseDirectory( _ /"src/main/libs" ),
-      proguardOption in Android := "-keep class com.badlogic.gdx.backends.android.** { *; }"
+      proguardOption in Android <<= (baseDirectory) { (b) => scala.io.Source.fromFile(b / "src/main/proguard.cfg").mkString }
     )
 
   val updateLibgdx = TaskKey[Unit]("update-gdx", "Updates libgdx")
