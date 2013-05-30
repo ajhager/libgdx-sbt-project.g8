@@ -29,6 +29,25 @@ Run the android project on a device:
 
 Visit [android-plugin](https://github.com/jberkel/android-plugin) for a more in-depth guide to android configuration and usage.
 
+## Using unit and instrumentation tests
+
+Run all unit tests from desktop, android and common (subdirectories src/test/scala):
+
+    $ sbt test
+
+Run specific set of unit tests:
+
+    $ sbt "project desktop" test
+
+Use instrumentation tests (directory android-tests):
+
+    $ sbt
+    > android:emulator-start <tab>
+    > android:install-emulator
+    > project android-tests
+    > android:install-emulator
+    > android:test-emulator
+
 ## iOS Support (not currently working)
 
 Open the ios solution in Xamarin Studio and build.
