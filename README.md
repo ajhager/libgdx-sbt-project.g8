@@ -35,10 +35,48 @@ Open the ios solution in Xamarin Studio and build.
 
 Every time you make changes to your scala files, you will need to clean and build since Xamarin cannot pick up changes to files it does not track.
 
-## Using with Intellij
+## Using with popular IDEs
 
-Make sure you have Intellij 12 and the latest Scala plugin, then type:
+In most cases you will be able to open and edit each sub-project (like common, android or desktop), but you still need to use SBT to build the project though.
+
+### Using with Eclipse
+
+Add following line to your project/plugins.sbt file:
+
+    addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "2.2.0")
+
+Make sure you have Eclipse 3.7 and the latest ScalaIDE plugin, then type:
+
+    $ sbt eclipse
+
+### Using with Intellij Idea
+
+Add following line to your project/plugins.sbt file:
+
+    addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.4.0") 
+
+Make sure you have Intellij Idea 12 and the latest Scala plugin, then type:
 
     $ sbt "project common" gen-idea
 
 You can now open the project, then create an "Android Application" build config using the android module and an "Application" build config using the desktop module.
+
+### Using with Netbeans
+
+Add following line to your project/plugins.sbt file:
+
+    addSbtPlugin("org.netbeans.nbsbt" % "nbsbt-plugin" % "1.0.2")
+
+Make sure you have Netbeans 7.2 and the latest NBScala plugin, then type:
+
+    $ sbt netbeans
+
+### Using with Emacs/Sublime Text
+
+Add following line to your project/plugins.sbt file:
+
+    addSbtPlugin("org.ensime" % "ensime-sbt-cmd" % "0.1.0")
+
+Make sure you have EMACS 22 or Sublime Text Editor 2 with Sublime-ENSIME integration and the latest ENSIME plugin (0.9+), then type:
+
+    $ sbt "ensime generate"
