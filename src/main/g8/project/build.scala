@@ -5,10 +5,16 @@ import org.scalasbt.androidplugin._
 import org.scalasbt.androidplugin.AndroidKeys._
 
 object Settings {
+  lazy val scalameter = new TestFramework("org.scalameter.ScalaMeterFramework")
+
   lazy val common = Defaults.defaultSettings ++ Seq (
     version := "0.1",
     scalaVersion := "$scala_version$",
-    updateLibgdxTask
+    resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "$scalatest_version$" % "test",
+    libraryDependencies += "com.github.axel22" %% "scalameter" % "$scalameter_version$" % "test",
+    testFrameworks += scalameter,
+    testOptions += Tests.Argument(scalameter, "-preJDK7")
    )
 
   lazy val desktop = Settings.common ++ Seq (
@@ -91,11 +97,25 @@ object LibgdxBuild extends Build {
     "desktop",
     file("desktop"),
     settings = Settings.desktop
-  ) dependsOn common
+  ) dependsOn(common % "compile->compile;test->test")
 
   lazy val android = Project (
     "android",
     file("android"),
     settings = Settings.android
-  ) dependsOn common
+  ) dependsOn(common % "compile->compile;test->test")
+
+  lazy val all = Project (
+    "all-platforms",
+    file("."),
+    settings = Settings.common :+ Settings.updateLibgdxTask
+  ) aggregate(common, desktop, android)
+
+  lazy val tests = Project (
+    "android-tests",
+    file("android-tests"),
+    settings = Settings.android ++
+               AndroidTest.androidSettings ++
+               Seq ( name := "$name$Tests" )
+  ) dependsOn android
 }
