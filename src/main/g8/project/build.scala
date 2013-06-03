@@ -22,7 +22,9 @@ object Settings {
       keyalias in Android := "change-me",
       mainAssetsPath in Android := file("common/src/main/resources"),
       unmanagedBase <<= baseDirectory( _ /"src/main/libs" ),
-      proguardOption in Android <<= (baseDirectory) { (b) => scala.io.Source.fromFile(b / "src/main/proguard.cfg").mkString }
+      proguardOption in Android <<= (baseDirectory) {
+        (b) => scala.io.Source.fromFile(b / "src/main/proguard.cfg").getLines.map(_.takeWhile(_!='#')).filter(_!="").mkString("\n")
+      }
     )
 
   val updateLibgdx = TaskKey[Unit]("update-gdx", "Updates libgdx")
