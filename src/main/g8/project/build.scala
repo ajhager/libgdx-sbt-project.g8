@@ -5,13 +5,16 @@ import org.scalasbt.androidplugin._
 import org.scalasbt.androidplugin.AndroidKeys._
 
 object Settings {
+  lazy val scalameter = new TestFramework("org.scalameter.ScalaMeterFramework")
+
   lazy val common = Defaults.defaultSettings ++ Seq (
     version := "0.1",
     scalaVersion := "$scala_version$",
     resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
     libraryDependencies += "org.scalatest" %% "scalatest" % "$scalatest_version$" % "test",
     libraryDependencies += "com.github.axel22" %% "scalameter" % "$scalameter_version$" % "test",
-    testFrameworks += new TestFramework("org.scalameter.ScalaMeterFramework")
+    testFrameworks += scalameter,
+    testOptions += Tests.Argument(scalameter, "-preJDK7")
    )
 
   lazy val desktop = Settings.common ++ Seq (
