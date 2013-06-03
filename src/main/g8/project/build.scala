@@ -8,7 +8,10 @@ object Settings {
   lazy val common = Defaults.defaultSettings ++ Seq (
     version := "0.1",
     scalaVersion := "$scala_version$",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "$scalatest_version$" % "test"
+    resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "$scalatest_version$" % "test",
+    libraryDependencies += "com.github.axel22" %% "scalameter" % "$scalameter_version$" % "test",
+    testFrameworks += new TestFramework("org.scalameter.ScalaMeterFramework")
    )
 
   lazy val desktop = Settings.common ++ Seq (
