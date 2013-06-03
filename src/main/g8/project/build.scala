@@ -40,10 +40,14 @@ object Settings {
     import java.io._
     import java.net.URL
     import java.util.regex.Pattern
-    
+
+    // Setup
+    val nightlies = $libgdx_use_nightlies$
+    val version = "$libgdx_version$"
+
     // Declare names
-    val baseUrl = "http://libgdx.badlogicgames.com/nightlies"
-    val gdxName = "libgdx-nightly-latest"
+    val baseUrl = if (nightlies) "http://libgdx.badlogicgames.com/nightlies" else "http://libgdx.googlecode.com/files"
+    val gdxName = if (nightlies) "libgdx-nightly-"+version else "libgdx-"+version
 
     // Fetch the file.
     s.log.info("Pulling %s" format(gdxName))
