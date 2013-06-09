@@ -11,8 +11,8 @@ object Settings {
     version := "0.1",
     scalaVersion := "$scala_version$",
     resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "$scalatest_version$" % "test",
-    libraryDependencies += "com.github.axel22" %% "scalameter" % "$scalameter_version$" % "test",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "1.9.1" % "test",
+    libraryDependencies += "com.github.axel22" %% "scalameter" % "0.3" % "test",
     testFrameworks += scalameter,
     testOptions += Tests.Argument(scalameter, "-preJDK7")
    )
