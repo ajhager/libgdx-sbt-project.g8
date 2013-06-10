@@ -20,4 +20,6 @@
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+    <uses-feature android:glEsVersion="0x00020000"/>
+
 </manifest>
