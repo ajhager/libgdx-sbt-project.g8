@@ -3,6 +3,8 @@ import sbt._
 import Keys._
 import org.scalasbt.androidplugin._
 import org.scalasbt.androidplugin.AndroidKeys._
+import sbtassembly.Plugin._
+import AssemblyKeys._
 
 object Settings {
   lazy val scalameter = new TestFramework("org.scalameter.ScalaMeterFramework")
@@ -17,7 +19,7 @@ object Settings {
     testOptions += Tests.Argument(scalameter, "-preJDK7")
    )
 
-  lazy val desktop = Settings.common ++ Seq (
+  lazy val desktop = Settings.common ++ assemblySettings ++ Seq (
     fork in Compile := true
   )
 
@@ -100,7 +102,10 @@ object LibgdxBuild extends Build {
     "desktop",
     file("desktop"),
     settings = Settings.desktop
-  ) dependsOn(common % "compile->compile;test->test")
+  ) dependsOn(common % "compile->compile;test->test") settings(
+    mainClass in assembly := Some("$package$.Main"),
+    AssemblyKeys.jarName in assembly := "$name$-0.1.jar"
+  )
 
   lazy val android = Project (
     "android",

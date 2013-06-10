@@ -23,6 +23,10 @@ Run the desktop project:
 
     $ sbt "project desktop" run
 
+Package the desktop project into single jar:
+
+    $ sbt assembly
+
 Run the android project on a device:
   
     $ sbt android:start-device
