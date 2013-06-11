@@ -19,6 +19,15 @@ object Settings {
     testOptions += Tests.Argument(scalameter, "-preJDK7")
    )
 
+  lazy val android_common = Seq (
+    unmanagedBase <<= (baseDirectory) { _ / "src/main/libs" },
+    platformName in Android := "android-$api_level$",
+    mainAssetsPath in Android := file("common/assets"),
+    proguardOption in Android <<= (baseDirectory) {
+      (b) => scala.io.Source.fromFile(b / "src/main/proguard.cfg").getLines.map(_.takeWhile(_!='#')).filter(_!="").mkString("\n")
+    }
+  )
+
   lazy val desktop = Settings.common ++ assemblySettings ++ Seq (
     unmanagedResourceDirectories in Compile += file("common/assets"),
     fork in Compile := true
@@ -26,15 +35,16 @@ object Settings {
 
   lazy val android = Settings.common ++
     AndroidProject.androidSettings ++
-    AndroidMarketPublish.settings ++ Seq (
-      name := "$name$",
-      platformName in Android := "android-$api_level$",
+    AndroidMarketPublish.settings ++
+    android_common ++ Seq (
       keyalias in Android := "change-me",
-      mainAssetsPath in Android := file("common/assets"),
-      unmanagedBase <<= baseDirectory( _ /"src/main/libs" ),
-      proguardOption in Android <<= (baseDirectory) {
-        (b) => scala.io.Source.fromFile(b / "src/main/proguard.cfg").getLines.map(_.takeWhile(_!='#')).filter(_!="").mkString("\n")
-      }
+      name := "$name$"
+    )
+
+  lazy val android_tests = Settings.common ++
+    AndroidTest.androidSettings ++
+    android_common ++ Seq (
+      name := "$name$ Tests"
     )
 
   val updateLibgdx = TaskKey[Unit]("update-gdx", "Updates libgdx")
@@ -115,17 +125,16 @@ object LibgdxBuild extends Build {
     settings = Settings.android
   ) dependsOn(common % "compile->compile;test->test")
 
-  lazy val all = Project (
+  lazy val android_tests = Project (
+    "android-tests",
+    file("android-tests"),
+    settings = Settings.android_tests
+  ) dependsOn android
+
+  lazy val all_platforms = Project (
     "all-platforms",
     file("."),
     settings = Settings.common :+ Settings.updateLibgdxTask
   ) aggregate(common, desktop, android)
 
-  lazy val tests = Project (
-    "android-tests",
-    file("android-tests"),
-    settings = Settings.android ++
-               AndroidTest.androidSettings ++
-               Seq ( name := "$name$ Tests" )
-  ) dependsOn android
 }
