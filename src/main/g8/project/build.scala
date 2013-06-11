@@ -20,6 +20,7 @@ object Settings {
    )
 
   lazy val desktop = Settings.common ++ assemblySettings ++ Seq (
+    unmanagedResourceDirectories in Compile += file("common/assets"),
     fork in Compile := true
   )
 
@@ -29,7 +30,7 @@ object Settings {
       name := "$name$",
       platformName in Android := "android-$api_level$",
       keyalias in Android := "change-me",
-      mainAssetsPath in Android := file("common/src/main/resources"),
+      mainAssetsPath in Android := file("common/assets"),
       unmanagedBase <<= baseDirectory( _ /"src/main/libs" ),
       proguardOption in Android <<= (baseDirectory) {
         (b) => scala.io.Source.fromFile(b / "src/main/proguard.cfg").getLines.map(_.takeWhile(_!='#')).filter(_!="").mkString("\n")
