@@ -26,6 +26,7 @@ object Settings {
   lazy val android = Settings.common ++
     AndroidProject.androidSettings ++
     AndroidMarketPublish.settings ++ Seq (
+      name := "$name$",
       platformName in Android := "android-$api_level$",
       keyalias in Android := "change-me",
       mainAssetsPath in Android := file("common/src/main/resources"),
@@ -104,7 +105,7 @@ object LibgdxBuild extends Build {
     settings = Settings.desktop
   ) dependsOn(common % "compile->compile;test->test") settings(
     mainClass in assembly := Some("$package$.Main"),
-    AssemblyKeys.jarName in assembly := "$name$-0.1.jar"
+    AssemblyKeys.jarName in assembly := "$name;format="norm"$-0.1.jar"
   )
 
   lazy val android = Project (
@@ -124,6 +125,6 @@ object LibgdxBuild extends Build {
     file("android-tests"),
     settings = Settings.android ++
                AndroidTest.androidSettings ++
-               Seq ( name := "$name$Tests" )
+               Seq ( name := "$name$ Tests" )
   ) dependsOn android
 }

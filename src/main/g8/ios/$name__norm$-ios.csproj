@@ -163,7 +163,7 @@
       <HintPath>libs\ios\objectal\libObjectAL.dll</HintPath>
     </Reference>
     <Reference Include="$name$">
-      <HintPath>target/$name$.dll</HintPath>
+      <HintPath>target/$name;format="norm"$.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
