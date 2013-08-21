@@ -25,7 +25,8 @@ object Settings {
     testOptions in Test ++= Seq(
       Tests.Argument(scalameter, "-preJDK7"),
       Tests.Argument(TestFrameworks.ScalaTest, "-o", "-u", "target/test-reports")
-    )
+    ),
+    unmanagedBase <<= baseDirectory(_/"libs")
   )
 
   lazy val desktop = common ++ assemblySettings ++ Seq(
@@ -40,7 +41,6 @@ object Settings {
     keyalias := "change-me",
     platformName := "android-$api_level$",
     mainAssetsPath := file("common/assets"),
-    unmanagedBase <<= baseDirectory(_/"lib"),
     unmanagedClasspath in Compile <+= (libraryJarPath) map (Attributed.blank(_)),
     proguardOptions <<= (baseDirectory) { (b) => Seq(
       scala.io.Source.fromFile(b/"src/main/proguard.cfg").getLines.map(_.takeWhile(_!='#')).filter(_!="").mkString("\n")
@@ -83,12 +83,12 @@ object Tasks {
 
     // Extract jars into their respective lib folders.
     s.log.info("Extracting common libs")
-    val commonDest = file("common/lib")
+    val commonDest = file("common/libs")
     val commonFilter = new ExactFilter("gdx.jar")
     IO.unzip(zipFile, commonDest, commonFilter)
 
     s.log.info("Extracting desktop libs")
-    val desktopDest = file("desktop/lib")
+    val desktopDest = file("desktop/libs")
     val desktopFilter = new ExactFilter("gdx-natives.jar") |
     new ExactFilter("gdx-backend-lwjgl.jar") |
     new ExactFilter("gdx-backend-lwjgl-natives.jar")
@@ -100,13 +100,15 @@ object Tasks {
     IO.unzip(zipFile, iosDest, iosFilter)
 
     s.log.info("Extracting android libs")
-    val androidDest = file("android/lib")
-    val androidFilter = new ExactFilter("gdx-backend-android.jar") |
-    new ExactFilter("armeabi/libgdx.so") |
+    val androidDestJar = file("android/libs")
+    val androidFilterJar = new ExactFilter("gdx-backend-android.jar")
+    val androidDestSo = file("android/lib")
+    val androidFilterSo = new ExactFilter("armeabi/libgdx.so") |
     new ExactFilter("armeabi/libandroidgl20.so") |
     new ExactFilter("armeabi-v7a/libgdx.so") |
     new ExactFilter("armeabi-v7a/libandroidgl20.so")
-    IO.unzip(zipFile, androidDest, androidFilter)
+    IO.unzip(zipFile, androidDestJar, androidFilterJar)
+    IO.unzip(zipFile, androidDestSo, androidFilterSo)
 
     // Destroy the file.
     zipFile.delete
