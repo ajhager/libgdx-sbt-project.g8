@@ -40,7 +40,7 @@ object Settings {
     keyalias := "change-me",
     platformName := "android-$api_level$",
     mainAssetsPath := file("common/assets"),
-    unmanagedBase <<= baseDirectory(_/"src/main/libs"),
+    unmanagedBase <<= baseDirectory(_/"lib"),
     unmanagedClasspath in Compile <+= (libraryJarPath) map (Attributed.blank(_)),
     proguardOptions <<= (baseDirectory) { (b) => Seq(
       scala.io.Source.fromFile(b/"src/main/proguard.cfg").getLines.map(_.takeWhile(_!='#')).filter(_!="").mkString("\n")
@@ -100,7 +100,7 @@ object Tasks {
     IO.unzip(zipFile, iosDest, iosFilter)
 
     s.log.info("Extracting android libs")
-    val androidDest = file("android/src/main/libs")
+    val androidDest = file("android/lib")
     val androidFilter = new ExactFilter("gdx-backend-android.jar") |
     new ExactFilter("armeabi/libgdx.so") |
     new ExactFilter("armeabi/libandroidgl20.so") |
