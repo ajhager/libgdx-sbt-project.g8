@@ -137,7 +137,7 @@ object LibgdxBuild extends Build {
     "all-platforms",
     file("."),
     settings = Settings.common :+ Tasks.updateLibgdx
-  ) aggregate(desktop, android)
+  ) aggregate(common, desktop, android)
 
   lazy val tests = AndroidTestProject(
     "android-tests",
