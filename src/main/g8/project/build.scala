@@ -41,6 +41,7 @@ object Settings {
     platformName := "android-$api_level$",
     mainAssetsPath := file("common/assets"),
     unmanagedBase <<= baseDirectory(_/"src/main/libs"),
+    unmanagedClasspath in Compile <+= (libraryJarPath) map (Attributed.blank(_)),
     proguardOptions <<= (baseDirectory) { (b) => Seq(
       scala.io.Source.fromFile(b/"src/main/proguard.cfg").getLines.map(_.takeWhile(_!='#')).filter(_!="").mkString("\n")
     )}
