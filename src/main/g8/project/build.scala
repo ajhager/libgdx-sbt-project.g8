@@ -1,45 +1,65 @@
 import sbt._
-
 import Keys._
-import org.scalasbt.androidplugin._
-import org.scalasbt.androidplugin.AndroidKeys._
+import Defaults._
+
+import sbtandroid.AndroidPlugin._
+
 import sbtassembly.Plugin._
 import AssemblyKeys._
 
 object Settings {
   lazy val scalameter = new TestFramework("org.scalameter.ScalaMeterFramework")
 
-  lazy val common = Defaults.defaultSettings ++ Seq (
+  lazy val common = Defaults.defaultSettings ++ Seq(
     version := "0.1",
     scalaVersion := "$scala_version$",
-    resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "1.9.1" % "test",
-    libraryDependencies += "com.github.axel22" %% "scalameter" % "0.3" % "test",
-    testFrameworks += scalameter,
-    testOptions += Tests.Argument(scalameter, "-preJDK7")
-   )
+    javacOptions ++= Seq("-encoding", "UTF-8", "-source", "1.6", "-target", "1.6"),
+    scalacOptions ++= Seq("-Xlint", "-unchecked", "-deprecation", "-feature"),
+    libraryDependencies ++= Seq(
+      "org.scalacheck" %% "scalacheck" % "1.10.1" % "test",
+      "com.github.axel22" %% "scalameter" % "0.3" % "test",
+      "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test"
+    ),
+    parallelExecution in Test := false,
+    testFrameworks in Test += scalameter,
+    testOptions in Test ++= Seq(
+      Tests.Argument(scalameter, "-preJDK7"),
+      Tests.Argument(TestFrameworks.ScalaTest, "-o", "-u", "target/test-reports")
+    )
+  )
 
-  lazy val desktop = Settings.common ++ assemblySettings ++ Seq (
+  lazy val desktop = common ++ assemblySettings ++ Seq(
+    name := "$name$",
     unmanagedResourceDirectories in Compile += file("common/assets"),
     fork in Compile := true
   )
 
-  lazy val android = Settings.common ++
-    AndroidProject.androidSettings ++
-    AndroidMarketPublish.settings ++ Seq (
-      name := "$name$",
-      platformName in Android := "android-$api_level$",
-      keyalias in Android := "change-me",
-      mainAssetsPath in Android := file("common/assets"),
-      unmanagedBase <<= baseDirectory( _ /"src/main/libs" ),
-      proguardOption in Android <<= (baseDirectory) {
-        (b) => scala.io.Source.fromFile(b / "src/main/proguard.cfg").getLines.map(_.takeWhile(_!='#')).filter(_!="").mkString("\n")
-      }
-    )
+  lazy val android = common ++ Seq(
+    name := "$name$",
+    versionCode := 0,
+    keyalias := "change-me",
+    platformName := "android-$api_level$",
+    mainAssetsPath := file("common/assets"),
+    unmanagedBase <<= baseDirectory(_/"src/main/libs"),
+    proguardOptions <<= (baseDirectory) { (b) => Seq(
+      scala.io.Source.fromFile(b/"src/main/proguard.cfg").getLines.map(_.takeWhile(_!='#')).filter(_!="").mkString("\n")
+    )}
+  )
 
-  val updateLibgdx = TaskKey[Unit]("update-gdx", "Updates libgdx")
+  lazy val assemblyOverrides = Seq(
+    mainClass in assembly := Some("$package$.Main"),
+    AssemblyKeys.jarName in assembly := "$name;format="norm"$-0.1.jar"
+  )
 
-  val updateLibgdxTask = updateLibgdx <<= streams map { (s: TaskStreams) =>
+  lazy val androidTestOverrides = Seq(
+    name := "$name$ Tests"
+  )
+}
+
+object Tasks {
+  lazy val updateLibgdxKey = TaskKey[Unit]("update-gdx", "Updates libgdx")
+
+  lazy val updateLibgdx = updateLibgdxKey <<= streams map { (s: TaskStreams) =>
     import Process._
     import java.io._
     import java.net.URL
@@ -94,38 +114,35 @@ object Settings {
 }
 
 object LibgdxBuild extends Build {
-  val common = Project (
+  lazy val common = Project(
     "common",
     file("common"),
-    settings = Settings.common
-  )
+    settings = Settings.common)
 
-  lazy val desktop = Project (
+  lazy val desktop = Project(
     "desktop",
     file("desktop"),
-    settings = Settings.desktop
-  ) dependsOn(common % "compile->compile;test->test") settings(
-    mainClass in assembly := Some("$package$.Main"),
-    AssemblyKeys.jarName in assembly := "$name;format="norm"$-0.1.jar"
-  )
+    settings = Settings.desktop)
+    .dependsOn(common)
+    .settings(Settings.assemblyOverrides: _*)
 
-  lazy val android = Project (
+  lazy val android = AndroidProject(
     "android",
     file("android"),
-    settings = Settings.android
-  ) dependsOn(common % "compile->compile;test->test")
+    settings = Settings.android)
+    .dependsOn(common)
 
-  lazy val all = Project (
+  lazy val all = Project(
     "all-platforms",
     file("."),
-    settings = Settings.common :+ Settings.updateLibgdxTask
-  ) aggregate(common, desktop, android)
+    settings = Settings.common :+ Tasks.updateLibgdx
+  ) aggregate(desktop, android)
 
-  lazy val tests = Project (
+  lazy val tests = AndroidTestProject(
     "android-tests",
     file("android-tests"),
-    settings = Settings.android ++
-               AndroidTest.androidSettings ++
-               Seq ( name := "$name$ Tests" )
-  ) dependsOn android
+    settings = Settings.android)
+    .dependsOn(android % "provided")
+    .settings(Settings.androidTestOverrides: _*)
 }
+
