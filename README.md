@@ -17,40 +17,32 @@ After filling in some information about your project, you can start placing your
 
 Update to the lastest libgdx nightlies (You will need to do this at least once):
 
-    $ sbt update-gdx 
+    $ sbt
+    > update-gdx 
 
 Run the desktop project:
 
-    $ sbt "project desktop" run
+    > desktop/run
 
 Package the desktop project into single jar:
 
-    $ sbt assembly
+    > assembly
 
 Run the android project on a device:
   
-    $ sbt android:start-device
+    > android/start
 
 Visit [android-plugin](https://github.com/jberkel/android-plugin) for a more in-depth guide to android configuration and usage.
 
-## Using unit and instrumentation tests
+## Using unit tests
 
 Run all unit tests from desktop, android and common (subdirectories src/test/scala):
 
-    $ sbt test
+    > test
 
 Run specific set of unit tests:
 
-    $ sbt "project desktop" test
-
-Use instrumentation tests (directory android-tests):
-
-    $ sbt
-    > android:emulator-start <tab>
-    > android:install-emulator
-    > project android-tests
-    > android:install-emulator
-    > android:test-emulator
+    > common/test
 
 ## iOS Support (not currently working)
 
