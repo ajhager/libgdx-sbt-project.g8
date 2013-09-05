@@ -44,11 +44,11 @@ Run specific set of unit tests:
 
     > common/test
 
-## iOS Support (not currently working)
+## iOS Support (WIP)
 
-Open the ios solution in Xamarin Studio and build.
+iOS Support is currently in separate branch. To get it, type the command:
 
-Every time you make changes to your scala files, you will need to clean and build since Xamarin cannot pick up changes to files it does not track.
+    $ g8 ajhager/libgdx-sbt-project -b ios
 
 ## Using with popular IDEs
 
