@@ -51,10 +51,6 @@ object Settings {
     mainClass in assembly := Some("$package$.Main"),
     AssemblyKeys.jarName in assembly := "$name;format="norm"$-0.1.jar"
   )
-
-  lazy val androidTestOverrides = Seq(
-    name := "$name$ Tests"
-  )
 }
 
 object Tasks {
@@ -140,12 +136,5 @@ object LibgdxBuild extends Build {
     file("."),
     settings = Settings.common :+ Tasks.updateLibgdx
   ) aggregate(common, desktop, android)
-
-  lazy val tests = AndroidTestProject(
-    "android-tests",
-    file("android-tests"),
-    settings = Settings.android)
-    .dependsOn(android % "provided")
-    .settings(Settings.androidTestOverrides: _*)
 }
 

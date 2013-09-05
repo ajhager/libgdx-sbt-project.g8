@@ -34,7 +34,7 @@ Run the android project on a device:
 
 Visit [android-plugin](https://github.com/jberkel/android-plugin) for a more in-depth guide to android configuration and usage.
 
-## Using unit and instrumentation tests
+## Using unit tests
 
 Run all unit tests from desktop, android and common (subdirectories src/test/scala):
 
@@ -43,12 +43,6 @@ Run all unit tests from desktop, android and common (subdirectories src/test/sca
 Run specific set of unit tests:
 
     > common/test
-
-Use instrumentation tests (directory android-tests):
-
-    > android/emulator-start <tab>
-    > android/install
-    > android-tests/test
 
 ## iOS Support (not currently working)
 
