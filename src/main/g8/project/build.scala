@@ -90,11 +90,6 @@ object Tasks {
     new ExactFilter("gdx-backend-lwjgl-natives.jar")
     IO.unzip(zipFile, desktopDest, desktopFilter)
 
-    s.log.info("Extracting ios libs")
-    val iosDest = file("ios/libs")
-    val iosFilter = GlobFilter("ios/*")
-    IO.unzip(zipFile, iosDest, iosFilter)
-
     s.log.info("Extracting android libs")
     val androidDestJar = file("android/libs")
     val androidFilterJar = new ExactFilter("gdx-backend-android.jar")
