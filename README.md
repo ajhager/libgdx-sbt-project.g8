@@ -44,12 +44,6 @@ Run specific set of unit tests:
 
     > common/test
 
-## iOS Support (WIP)
-
-iOS Support is currently in separate branch. To get it, type the command:
-
-    $ g8 ajhager/libgdx-sbt-project -b ios
-
 ## Using with popular IDEs
 
 In most cases you will be able to open and edit each sub-project (like common, android or desktop), but you still need to use SBT to build the project though.
