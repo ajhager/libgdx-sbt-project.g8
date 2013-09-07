@@ -44,12 +44,6 @@ Run specific set of unit tests:
 
     > common/test
 
-## iOS Support (not currently working)
-
-Open the ios solution in Xamarin Studio and build.
-
-Every time you make changes to your scala files, you will need to clean and build since Xamarin cannot pick up changes to files it does not track.
-
 ## Using with popular IDEs
 
 In most cases you will be able to open and edit each sub-project (like common, android or desktop), but you still need to use SBT to build the project though.
@@ -64,11 +58,13 @@ Make sure you have Eclipse 3.7 and the latest ScalaIDE plugin, then type:
 
     $ sbt eclipse
 
+Do not use version 2.3.0, because it isn't compatible with SBT 0.12.x, that is required for Android plugin.
+
 ### Using with Intellij Idea
 
 Add following line to your project/plugins.sbt file:
 
-    addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.4.0") 
+    addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.5.1") 
 
 Make sure you have Intellij Idea 12 and the latest Scala plugin, then type:
 
@@ -90,8 +86,11 @@ Make sure you have Netbeans 7.2 and the latest NBScala plugin, then type:
 
 Add following line to your project/plugins.sbt file:
 
-    addSbtPlugin("org.ensime" % "ensime-sbt-cmd" % "0.1.0")
+    addSbtPlugin("org.ensime" % "ensime-sbt-cmd" % "0.1.1")
 
 Make sure you have EMACS 22 or Sublime Text Editor 2 with Sublime-ENSIME integration and the latest ENSIME plugin (0.9+), then type:
 
     $ sbt "ensime generate"
+
+Do not use version 0.1.2, because it isn't compatible with SBT 0.12.x, that is required for Android plugin.
+
