@@ -30,13 +30,11 @@ object Settings {
   )
 
   lazy val desktop = common ++ assemblySettings ++ Seq(
-    name := "$name$",
     unmanagedResourceDirectories in Compile += file("common/assets"),
     fork in Compile := true
   )
 
   lazy val android = common ++ Seq(
-    name := "$name$",
     versionCode := 0,
     keyalias := "change-me",
     platformName := "android-$api_level$",
