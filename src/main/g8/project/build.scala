@@ -47,8 +47,11 @@ object Settings {
   )
 
   lazy val ios = common ++ Seq(
-    unmanagedResourceDirectories in Compile += file("common/assets"),
-    executableName := "$name$",
+    unmanagedResources in Compile <++= (baseDirectory) map { _ =>
+      (file("common/assets") ** "*").get
+    },
+    skipPngCrush := true,
+    executableName := "Hagerbot",
     frameworks := Seq("UIKit", "OpenGLES", "QuartzCore", "CoreGraphics", "OpenAL", "AudioToolbox", "AVFoundation")
   )
 
