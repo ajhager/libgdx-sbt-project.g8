@@ -10,7 +10,8 @@ class Main extends AndroidApplication {
     config.useAccelerometer = false
     config.useCompass = false
     config.useWakelock = true
-    config.useGL20 = true
+    config.hideStatusBar = true
+    config.useGL20 = false
     initialize(new $main_class$(), config)
   }
 }
