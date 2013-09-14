@@ -3,6 +3,7 @@ import Keys._
 import Defaults._
 
 import sbtandroid.AndroidPlugin._
+import sbtrobovm.RobovmPlugin._
 
 import sbtassembly.Plugin._
 import AssemblyKeys._
@@ -43,6 +44,15 @@ object Settings {
     proguardOptions <<= (baseDirectory) { (b) => Seq(
       scala.io.Source.fromFile(b/"src/main/proguard.cfg").getLines.map(_.takeWhile(_!='#')).filter(_!="").mkString("\n")
     )}
+  )
+
+  lazy val ios = common ++ Seq(
+    unmanagedResources in Compile <++= (baseDirectory) map { _ =>
+      (file("common/assets") ** "*").get
+    },
+    skipPngCrush := true,
+    executableName := "$name$",
+    frameworks := Seq("UIKit", "OpenGLES", "QuartzCore", "CoreGraphics", "OpenAL", "AudioToolbox", "AVFoundation")
   )
 
   lazy val assemblyOverrides = Seq(
@@ -99,6 +109,18 @@ object Tasks {
     IO.unzip(zipFile, androidDestJar, androidFilterJar)
     IO.unzip(zipFile, androidDestSo, androidFilterSo)
 
+    s.log.info("Extracting ios libs")
+    val iosDestJar = file("ios/libs")
+    val iosFilterJar = new ExactFilter("gdx-backend-robovm.jar")
+    val iosDestSo = file("ios/lib")
+    val iosFilterSo = new ExactFilter("ios/libgdx.a") |
+    new ExactFilter("ios/libObjectAL.a")
+    IO.unzip(zipFile, iosDestJar, iosFilterJar)
+    IO.unzip(zipFile, iosDestSo, iosFilterSo)
+    IO.move(file("ios/lib/ios/libgdx.a"), file("ios/lib/libgdx.a"))
+    IO.move(file("ios/lib/ios/libObjectAL.a"), file("ios/lib/libObjectAL.a"))
+    IO.delete(file("ios/lib/ios"))
+
     // Destroy the file.
     zipFile.delete
     s.log.info("Update complete")
@@ -124,10 +146,16 @@ object LibgdxBuild extends Build {
     settings = Settings.android)
     .dependsOn(common)
 
+  lazy val ios = RobovmProject(
+    "ios",
+    file("ios"),
+    settings = Settings.ios)
+    .dependsOn(common)
+
   lazy val all = Project(
     "all-platforms",
     file("."),
     settings = Settings.common :+ Tasks.updateLibgdx
-  ) aggregate(common, desktop, android)
+  ) aggregate(common, desktop, android, ios)
 }
 
