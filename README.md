@@ -34,6 +34,12 @@ Run the android project on a device:
 
 Visit [android-plugin](https://github.com/jberkel/android-plugin) for a more in-depth guide to android configuration and usage.
 
+Run the ios project on a device:
+
+    > ios/device
+
+Visit [sbt-robovm](https://github.com/ajhager/robovm) for a more in-depth guide to ios configuration and usage.
+
 ## Using unit tests
 
 Run all unit tests from desktop, android and common (subdirectories src/test/scala):
@@ -93,4 +99,3 @@ Make sure you have EMACS 22 or Sublime Text Editor 2 with Sublime-ENSIME integra
     $ sbt "ensime generate"
 
 Do not use version 0.1.2, because it isn't compatible with SBT 0.12.x, that is required for Android plugin.
-
