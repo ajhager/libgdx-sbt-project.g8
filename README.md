@@ -38,7 +38,7 @@ Run the ios project on a device:
 
     > ios/device
 
-Visit [sbt-robovm](https://github.com/ajhager/robovm) for a more in-depth guide to ios configuration and usage.
+Visit [sbt-robovm](https://github.com/ajhager/sbt-robovm) for a more in-depth guide to ios configuration and usage.
 
 ## Using unit tests
 
