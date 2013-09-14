@@ -39,7 +39,7 @@ object Settings {
     versionCode := 0,
     keyalias := "change-me",
     platformName := "android-$api_level$",
-    mainAssetsPath := file("common/assets"),
+    mainAssetsPath in Compile := file("common/assets"),
     unmanagedJars in Compile <+= (libraryJarPath) (p => Attributed.blank(p)) map( x=> x),
     proguardOptions <<= (baseDirectory) { (b) => Seq(
       scala.io.Source.fromFile(b/"src/main/proguard.cfg").getLines.map(_.takeWhile(_!='#')).filter(_!="").mkString("\n")
