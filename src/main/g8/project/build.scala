@@ -51,7 +51,7 @@ object Settings {
       (file("common/assets") ** "*").get
     },
     skipPngCrush := true,
-    executableName := "$name$",
+    iosInfoPlist <<= (sourceDirectory in Compile){ sd => Some(sd / "Info.plist") },
     frameworks := Seq("UIKit", "OpenGLES", "QuartzCore", "CoreGraphics", "OpenAL", "AudioToolbox", "AVFoundation")
   )
 
