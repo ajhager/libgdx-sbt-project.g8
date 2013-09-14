@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.GL20
 class Main extends IOSApplication.Delegate {
   override protected def createApplication(): IOSApplication = {
     val config = new IOSApplicationConfiguration()
-    return new IOSApplication($main_class$(), config)
+    return new IOSApplication(new $main_class$(), config)
   }
 }
 
