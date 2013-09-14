@@ -51,7 +51,7 @@ object Settings {
       (file("common/assets") ** "*").get
     },
     skipPngCrush := true,
-    executableName := "Hagerbot",
+    executableName := "$name$",
     frameworks := Seq("UIKit", "OpenGLES", "QuartzCore", "CoreGraphics", "OpenAL", "AudioToolbox", "AVFoundation")
   )
 
