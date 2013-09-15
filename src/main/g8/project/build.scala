@@ -50,6 +50,7 @@ object Settings {
     unmanagedResources in Compile <++= (baseDirectory) map { _ =>
       (file("common/assets") ** "*").get
     },
+    forceLinkClasses := Seq("com.badlogic.gdx.scenes.scene2d.ui.*"),
     skipPngCrush := true,
     iosInfoPlist <<= (sourceDirectory in Compile){ sd => Some(sd / "Info.plist") },
     frameworks := Seq("UIKit", "OpenGLES", "QuartzCore", "CoreGraphics", "OpenAL", "AudioToolbox", "AVFoundation")
