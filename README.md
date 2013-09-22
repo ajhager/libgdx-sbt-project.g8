@@ -26,7 +26,7 @@ Run the desktop project:
 
 Package the desktop project into single jar:
 
-    > assembly
+    > desktop/assembly
 
 Run the android project on a device:
   
