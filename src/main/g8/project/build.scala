@@ -85,10 +85,12 @@ object Tasks {
     val outfile = "\"" + (target/"%s-%s.jar".format(name, ver)).absolutePath + "\""
     val classfiles = "\"" + cd.absolutePath + "\""
     val manifest = "\"" + file("desktop/src/main/manifest").absolutePath + "\""
+    val assets = "\"" + file("common/assets").absolutePath + "\""
     val proguard = options ++ Seq("-cp", Path.makeString(cp.files), "proguard.ProGuard") ++ proguardOptions ++ Seq(
       "-injars", classfiles,
       "-injars", inJars,
       "-injars", manifest,
+      "-injars", assets,
       "-outjars", outfile)
    
     s.log.info("preparing proguarded assembly")
