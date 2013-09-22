@@ -5,10 +5,9 @@ import Defaults._
 import sbtandroid.AndroidPlugin._
 import sbtrobovm.RobovmPlugin._
 
-import sbtassembly.Plugin._
-import AssemblyKeys._
-
 object Settings {
+  lazy val desktopJarName = SettingKey[String]("desktop-jar-name", "name of JAR file for desktop")
+
   lazy val scalameter = new TestFramework("org.scalameter.ScalaMeterFramework")
 
   lazy val common = Defaults.defaultSettings ++ Seq(
@@ -27,11 +26,24 @@ object Settings {
       Tests.Argument(scalameter, "-preJDK7"),
       Tests.Argument(TestFrameworks.ScalaTest, "-o", "-u", "target/test-reports")
     ),
-    unmanagedBase <<= baseDirectory(_/"libs")
+    unmanagedBase <<= baseDirectory(_/"libs"),
+    proguardOptions <<= (baseDirectory) { (b) => Seq(
+      scala.io.Source.fromFile(file("common/src/main/proguard.cfg")).getLines.map(_.takeWhile(_!='#')).filter(_!="").mkString("\n"), {
+        val path = b/"src/main/proguard.cfg"
+        if (path.exists()) {
+          scala.io.Source.fromFile(b/"src/main/proguard.cfg").getLines.map(_.takeWhile(_!='#')).filter(_!="").mkString("\n")
+        } else {
+          ""
+        }
+      }
+    )}
   )
 
-  lazy val desktop = common ++ assemblySettings ++ Seq(
+  lazy val desktop = common ++ Seq(
     unmanagedResourceDirectories in Compile += file("common/assets"),
+    libraryDependencies ++= Seq("net.sf.proguard" % "proguard-base" % "4.8"), // keep in sync with sbt-android version
+    Tasks.assembly,
+    desktopJarName := "$name;format="norm"$",
     fork in Compile := true
   )
 
@@ -40,10 +52,7 @@ object Settings {
     keyalias := "change-me",
     platformName := "android-$api_level$",
     mainAssetsPath in Compile := file("common/assets"),
-    unmanagedJars in Compile <+= (libraryJarPath) (p => Attributed.blank(p)) map( x=> x),
-    proguardOptions <<= (baseDirectory) { (b) => Seq(
-      scala.io.Source.fromFile(b/"src/main/proguard.cfg").getLines.map(_.takeWhile(_!='#')).filter(_!="").mkString("\n")
-    )}
+    unmanagedJars in Compile <+= (libraryJarPath) (p => Attributed.blank(p)) map( x=> x)
   )
 
   lazy val ios = common ++ Seq(
@@ -56,14 +65,45 @@ object Settings {
     frameworks := Seq("UIKit", "OpenGLES", "QuartzCore", "CoreGraphics", "OpenAL", "AudioToolbox", "AVFoundation"),
     nativePath <<= (baseDirectory){ bd => Seq(bd / "lib") }
   )
-
-  lazy val assemblyOverrides = Seq(
-    mainClass in assembly := Some("$package$.Main"),
-    AssemblyKeys.jarName in assembly := "$name;format="norm"$-0.1.jar"
-  )
 }
 
 object Tasks {
+  import java.io.{File => JFile}
+  import Settings.desktopJarName
+
+  lazy val assemblyKey = TaskKey[Unit]("assembly", "Assembly desktop version using Proguard")
+
+  lazy val assembly = assemblyKey <<= (compile in Compile,       // dependency to make sure compile finished
+      target, desktopJarName, version,                           // data for output jar name
+      proguardOptions,                                           // merged proguard.cfg from common and desktop
+      javaOptions in Compile, managedClasspath in Compile,       // java options and classpath
+      classDirectory in Compile, dependencyClasspath in Compile, // classes and jars to proguard
+      streams) map { (c, target, name, ver, proguardOptions, options, cp, cd, dependencies, s) =>
+    val exclusions = Seq("!META-INF/MANIFEST.MF", "!library.properties").mkString(",")
+    val withoutProguard = dependencies.filterNot(cpe => cpe.data.absolutePath contains "proguard-base")
+    val inJars = withoutProguard.map("\"" + _.data.absolutePath + "\"("+exclusions+")").mkString(JFile.pathSeparator)
+    val outfile = "\"" + (target/"%s-%s.jar".format(name, ver)).absolutePath + "\""
+    val classfiles = "\"" + cd.absolutePath + "\""
+    val manifest = "\"" + file("desktop/src/main/manifest").absolutePath + "\""
+    val assets = "\"" + file("common/assets").absolutePath + "\""
+    val proguard = options ++ Seq("-cp", Path.makeString(cp.files), "proguard.ProGuard") ++ proguardOptions ++ Seq(
+      "-injars", classfiles,
+      "-injars", inJars,
+      "-injars", manifest,
+      "-injars", assets,
+      "-outjars", outfile)
+   
+    s.log.info("preparing proguarded assembly")
+    s.log.debug("Proguard command:")
+    s.log.debug("java "+proguard.mkString(" "))
+    val exitCode = Process("java", proguard) ! s.log
+    if (exitCode != 0) {
+      sys.error("Proguard failed with exit code [%s]" format exitCode)
+    } else {
+      s.log.info("Output file: "+outfile)
+    }
+  }
+
   lazy val updateLibgdxKey = TaskKey[Unit]("update-gdx", "Updates libgdx")
 
   lazy val updateLibgdx = updateLibgdxKey <<= streams map { (s: TaskStreams) =>
@@ -140,7 +180,6 @@ object LibgdxBuild extends Build {
     file("desktop"),
     settings = Settings.desktop)
     .dependsOn(common)
-    .settings(Settings.assemblyOverrides: _*)
 
   lazy val android = AndroidProject(
     "android",
@@ -157,7 +196,7 @@ object LibgdxBuild extends Build {
   lazy val all = Project(
     "all-platforms",
     file("."),
-    settings = Settings.common :+ Tasks.updateLibgdx
-  ) aggregate(common, desktop, android, ios)
+    settings = Settings.common :+ Tasks.updateLibgdx)
+    .aggregate(common, desktop, android, ios)
 }
 
