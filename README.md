@@ -15,10 +15,10 @@ After filling in some information about your project, you can start placing your
 
 ## Managing your project
 
-Update to the lastest libgdx nightlies (You will need to do this at least once):
+Update to the lastest libraries:
 
     $ sbt
-    > update-gdx 
+    > update
 
 Run the desktop project:
 
