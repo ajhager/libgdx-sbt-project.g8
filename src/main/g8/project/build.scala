@@ -27,15 +27,23 @@ object Settings {
       Tests.Argument(scalameter, "-preJDK7"),
       Tests.Argument(TestFrameworks.ScalaTest, "-o", "-u", "target/test-reports")
     ),
-    unmanagedBase <<= baseDirectory(_/"libs")
+    unmanagedBase <<= baseDirectory(_/"libs"),
+    resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
+    libraryDependencies ++= Seq(
+      "com.badlogicgames.gdx" % "gdx" % "0.9.9-SNAPSHOT"
+    )
   )
 
   lazy val desktop = common ++ assemblySettings ++ Seq(
     unmanagedResourceDirectories in Compile += file("common/assets"),
-    fork in Compile := true
+    fork in Compile := true,
+    libraryDependencies ++= Seq(
+      "com.badlogicgames.gdx" % "gdx-backend-lwjgl" % "0.9.9-SNAPSHOT",
+      "com.badlogicgames.gdx" % "gdx-platform" % "0.9.9-SNAPSHOT" classifier "natives-desktop"
+    )
   )
 
-  lazy val android = common ++ Seq(
+  lazy val android = common ++ natives ++ Seq(
     versionCode := 0,
     keyalias := "change-me",
     platformName := "android-$api_level$",
@@ -43,10 +51,19 @@ object Settings {
     unmanagedJars in Compile <+= (libraryJarPath) (p => Attributed.blank(p)) map( x=> x),
     proguardOptions <<= (baseDirectory) { (b) => Seq(
       scala.io.Source.fromFile(b/"src/main/proguard.cfg").getLines.map(_.takeWhile(_!='#')).filter(_!="").mkString("\n")
+    )},
+    libraryDependencies ++= Seq(
+      "com.badlogicgames.gdx" % "gdx-backend-android" % "0.9.9-SNAPSHOT",
+      "com.badlogicgames.gdx" % "gdx-platform" % "0.9.9-SNAPSHOT" % "natives" classifier "natives-armeabi",
+      "com.badlogicgames.gdx" % "gdx-platform" % "0.9.9-SNAPSHOT" % "natives" classifier "natives-armeabi-v7a"
+    ),
+    nativeExtractions <<= (baseDirectory) { base => Seq(
+      ("natives-armeabi.jar", new ExactFilter("libgdx.so"), base / "lib" / "armeabi"),
+      ("natives-armeabi-v7a.jar", new ExactFilter("libgdx.so"), base / "lib" / "armeabi-v7a")
     )}
   )
 
-  lazy val ios = common ++ Seq(
+  lazy val ios = common ++ natives ++ Seq(
     unmanagedResources in Compile <++= (baseDirectory) map { _ =>
       (file("common/assets") ** "*").get
     },
@@ -54,79 +71,36 @@ object Settings {
     skipPngCrush := true,
     iosInfoPlist <<= (sourceDirectory in Compile){ sd => Some(sd / "Info.plist") },
     frameworks := Seq("UIKit", "OpenGLES", "QuartzCore", "CoreGraphics", "OpenAL", "AudioToolbox", "AVFoundation"),
-    nativePath <<= (baseDirectory){ bd => Seq(bd / "lib") }
+    nativePath <<= (baseDirectory){ bd => Seq(bd / "lib") },
+    libraryDependencies ++= Seq(
+      "com.badlogicgames.gdx" % "gdx-backend-robovm" % "0.9.9-SNAPSHOT",
+      "com.badlogicgames.gdx" % "gdx-platform" % "0.9.9-SNAPSHOT" % "natives" classifier "natives-ios"
+    ),
+    nativeExtractions <<= (baseDirectory) { base => Seq(
+      ("natives-ios.jar", new ExactFilter("libgdx.a") | new ExactFilter("libObjectAL.a"), base / "lib")
+    )}
   )
 
   lazy val assemblyOverrides = Seq(
     mainClass in assembly := Some("$package$.Main"),
     AssemblyKeys.jarName in assembly := "$name;format="norm"$-0.1.jar"
   )
-}
 
-object Tasks {
-  lazy val updateLibgdxKey = TaskKey[Unit]("update-gdx", "Updates libgdx")
-
-  lazy val updateLibgdx = updateLibgdxKey <<= streams map { (s: TaskStreams) =>
-    import Process._
-    import java.io._
-    import java.net.URL
-    import java.util.regex.Pattern
-
-    // Setup
-    val version = "$libgdx_version$"
-
-    // Declare names
-    val baseUrl = if (version == "nightly") "http://libgdx.badlogicgames.com/nightlies" else "http://libgdx.googlecode.com/files"
-    val gdxName = if (version == "nightly") "libgdx-nightly-latest" else "libgdx-"+version
-
-    // Fetch the file.
-    s.log.info("Pulling %s" format(gdxName))
-    s.log.warn("This may take a few minutes...")
-    val zipName = "%s.zip" format(gdxName)
-    val zipFile = new java.io.File(zipName)
-    val url = new URL("%s/%s" format(baseUrl, zipName))
-    IO.download(url, zipFile)
-
-    // Extract jars into their respective lib folders.
-    s.log.info("Extracting common libs")
-    val commonDest = file("common/libs")
-    val commonFilter = new ExactFilter("gdx.jar")
-    IO.unzip(zipFile, commonDest, commonFilter)
-
-    s.log.info("Extracting desktop libs")
-    val desktopDest = file("desktop/libs")
-    val desktopFilter = new ExactFilter("gdx-natives.jar") |
-    new ExactFilter("gdx-backend-lwjgl.jar") |
-    new ExactFilter("gdx-backend-lwjgl-natives.jar")
-    IO.unzip(zipFile, desktopDest, desktopFilter)
-
-    s.log.info("Extracting android libs")
-    val androidDestJar = file("android/libs")
-    val androidFilterJar = new ExactFilter("gdx-backend-android.jar")
-    val androidDestSo = file("android/lib")
-    val androidFilterSo = new ExactFilter("armeabi/libgdx.so") |
-    new ExactFilter("armeabi/libandroidgl20.so") |
-    new ExactFilter("armeabi-v7a/libgdx.so") |
-    new ExactFilter("armeabi-v7a/libandroidgl20.so")
-    IO.unzip(zipFile, androidDestJar, androidFilterJar)
-    IO.unzip(zipFile, androidDestSo, androidFilterSo)
-
-    s.log.info("Extracting ios libs")
-    val iosDestJar = file("ios/libs")
-    val iosFilterJar = new ExactFilter("gdx-backend-robovm.jar")
-    val iosDestSo = file("ios/lib")
-    val iosFilterSo = new ExactFilter("ios/libgdx.a") |
-    new ExactFilter("ios/libObjectAL.a")
-    IO.unzip(zipFile, iosDestJar, iosFilterJar)
-    IO.unzip(zipFile, iosDestSo, iosFilterSo)
-    IO.move(file("ios/lib/ios/libgdx.a"), file("ios/lib/libgdx.a"))
-    IO.move(file("ios/lib/ios/libObjectAL.a"), file("ios/lib/libObjectAL.a"))
-    IO.delete(file("ios/lib/ios"))
-
-    // Destroy the file.
-    zipFile.delete
-    s.log.info("Update complete")
-  }
+  lazy val nativeExtractions = SettingKey[Seq[(String, NameFilter, File)]]("native-extractions", "(jar name partial, sbt.NameFilter of files to extract, destination directory)")
+  lazy val extractNatives = TaskKey[Unit]("extract-natives", "Extracts native files")
+  lazy val natives = Seq(
+    ivyConfigurations += config("natives"),
+    nativeExtractions := Seq.empty,
+    extractNatives <<= (nativeExtractions, update) map { (ne, up) =>
+      val jars = up.select(configurationFilter("natives"))
+      ne foreach { case (jarName, fileFilter, outputPath) =>
+        jars find(_.getName.contains(jarName)) map { jar =>
+            IO.unzip(jar, outputPath, fileFilter)
+        }
+      }
+    },
+    compile in Compile <<= (compile in Compile) dependsOn (extractNatives)
+  )
 }
 
 object LibgdxBuild extends Build {
@@ -157,7 +131,6 @@ object LibgdxBuild extends Build {
   lazy val all = Project(
     "all-platforms",
     file("."),
-    settings = Settings.common :+ Tasks.updateLibgdx
+    settings = Settings.common
   ) aggregate(common, desktop, android, ios)
 }
-
