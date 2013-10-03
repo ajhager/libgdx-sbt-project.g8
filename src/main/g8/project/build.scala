@@ -43,7 +43,7 @@ object Settings {
     )
   )
 
-  lazy val android = common ++ Tasks.settings ++ Seq(
+  lazy val android = common ++ natives ++ Seq(
     versionCode := 0,
     keyalias := "change-me",
     platformName := "android-$api_level$",
@@ -54,16 +54,16 @@ object Settings {
     )},
     libraryDependencies ++= Seq(
       "com.badlogicgames.gdx" % "gdx-backend-android" % "0.9.9-SNAPSHOT",
-      "com.badlogicgames.gdx" % "gdx-platform" % "0.9.9-SNAPSHOT" classifier "natives-armeabi",
-      "com.badlogicgames.gdx" % "gdx-platform" % "0.9.9-SNAPSHOT" classifier "natives-armeabi-v7a"
+      "com.badlogicgames.gdx" % "gdx-platform" % "0.9.9-SNAPSHOT" % "natives" classifier "natives-armeabi",
+      "com.badlogicgames.gdx" % "gdx-platform" % "0.9.9-SNAPSHOT" % "natives" classifier "natives-armeabi-v7a"
     ),
-    Tasks.nativeExtractions <<= (baseDirectory) { base => Seq(
+    nativeExtractions <<= (baseDirectory) { base => Seq(
       ("natives-armeabi.jar", new ExactFilter("libgdx.so"), base / "lib" / "armeabi"),
       ("natives-armeabi-v7a.jar", new ExactFilter("libgdx.so"), base / "lib" / "armeabi-v7a")
     )}
   )
 
-  lazy val ios = common ++ Tasks.settings ++ Seq(
+  lazy val ios = common ++ natives ++ Seq(
     unmanagedResources in Compile <++= (baseDirectory) map { _ =>
       (file("common/assets") ** "*").get
     },
@@ -74,9 +74,9 @@ object Settings {
     nativePath <<= (baseDirectory){ bd => Seq(bd / "lib") },
     libraryDependencies ++= Seq(
       "com.badlogicgames.gdx" % "gdx-backend-robovm" % "0.9.9-SNAPSHOT",
-      "com.badlogicgames.gdx" % "gdx-platform" % "0.9.9-SNAPSHOT" classifier "natives-ios"
+      "com.badlogicgames.gdx" % "gdx-platform" % "0.9.9-SNAPSHOT" % "natives" classifier "natives-ios"
     ),
-    Tasks.nativeExtractions <<= (baseDirectory) { base => Seq(
+    nativeExtractions <<= (baseDirectory) { base => Seq(
       ("natives-ios.jar", new ExactFilter("libgdx.a") | new ExactFilter("libObjectAL.a"), base / "lib")
     )}
   )
@@ -85,17 +85,17 @@ object Settings {
     mainClass in assembly := Some("$package$.Main"),
     AssemblyKeys.jarName in assembly := "$name;format="norm"$-0.1.jar"
   )
-}
 
-object Tasks {
   lazy val nativeExtractions = SettingKey[Seq[(String, NameFilter, File)]]("native-extractions", "(jar name partial, sbt.NameFilter of files to extract, destination directory)")
   lazy val extractNatives = TaskKey[Unit]("extract-natives", "Extracts native files")
-  lazy val settings = Seq(
+  lazy val natives = Seq(
+    ivyConfigurations += config("natives"),
     nativeExtractions := Seq.empty,
-    extractNatives <<= (dependencyClasspath in Compile, nativeExtractions) map { (cp, ne) =>
+    extractNatives <<= (nativeExtractions, update) map { (ne, up) =>
+      val jars = up.select(configurationFilter("natives"))
       ne foreach { case (jarName, fileFilter, outputPath) =>
-        cp find(_.data.getName.contains(jarName)) map { jar =>
-            IO.unzip(jar.data, outputPath, fileFilter)
+        jars find(_.getName.contains(jarName)) map { jar =>
+            IO.unzip(jar, outputPath, fileFilter)
         }
       }
     },
@@ -134,4 +134,3 @@ object LibgdxBuild extends Build {
     settings = Settings.common
   ) aggregate(common, desktop, android, ios)
 }
-
