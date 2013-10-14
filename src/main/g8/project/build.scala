@@ -103,7 +103,7 @@ object Tasks {
 
   lazy val assemblyKey = TaskKey[Unit]("assembly", "Assembly desktop using Proguard")
 
-  lazy val assembly = assemblyKey <<= (compile in Compile, // dependency to make sure compile finished
+  lazy val assembly = assemblyKey <<= (fullClasspath in Runtime, // dependency to make sure compile finished
       target, desktopJarName, version, // data for output jar name
       proguardOptions, // merged proguard.cfg from common and desktop
       javaOptions in Compile, managedClasspath in Compile, // java options and classpath
