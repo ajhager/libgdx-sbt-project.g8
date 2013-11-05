@@ -36,7 +36,7 @@ object Settings {
     unmanagedResourceDirectories in Compile += file("common/assets"),
     fork in Compile := true,
     libraryDependencies ++= Seq(
-      "net.sf.proguard" % "proguard-base" % "4.8",
+      "net.sf.proguard" % "proguard-base" % "4.8" % "provided",
       "com.badlogicgames.gdx" % "gdx-backend-lwjgl" % "$libgdx_version$",
       "com.badlogicgames.gdx" % "gdx-platform" % "$libgdx_version$" classifier "natives-desktop"
     ),
@@ -107,11 +107,17 @@ object Tasks {
       target, desktopJarName, version, // data for output jar name
       proguardOptions, // merged proguard.cfg from common and desktop
       javaOptions in Compile, managedClasspath in Compile, // java options and classpath
-      classDirectory in Compile, dependencyClasspath in Compile, // classes and jars to proguard
-      streams) map { (c, target, name, ver, proguardOptions, options, cp, cd, dependencies, s) =>
+      classDirectory in Compile, dependencyClasspath in Compile, update in Compile, // classes and jars to proguard
+      streams) map { (c, target, name, ver, proguardOptions, options, cp, cd, dependencies, up, s) =>
+    val provided = Set(up.select(configurationFilter("provided")):_*)
+    val compile = Set(up.select(configurationFilter("compile")):_*)
+    val runtime = Set(up.select(configurationFilter("runtime")):_*)
+    val optional = Set(up.select(configurationFilter("optional")):_*)
+    val onlyProvidedNames = provided -- compile -- runtime -- optional
+    val (onlyProvided, withoutProvided) = dependencies.partition(cpe => onlyProvidedNames contains cpe.data)
     val exclusions = Seq("!META-INF/MANIFEST.MF", "!library.properties").mkString(",")
-    val withoutProguard = dependencies.filterNot(cpe => cpe.data.absolutePath contains "proguard-base")
-    val inJars = withoutProguard.map("\""+_.data.absolutePath+"\"("+exclusions+")").mkString(JFile.pathSeparator)
+    val inJars = withoutProvided.map("\""+_.data.absolutePath+"\"("+exclusions+")").mkString(JFile.pathSeparator)
+    val libraryJars = onlyProvided.map("\""+_.data.absolutePath+"\"").mkString(JFile.pathSeparator)
     val outfile = "\""+(target/"%s-%s.jar".format(name, ver)).absolutePath+"\""
     val classfiles = "\"" + cd.absolutePath + "\""
     val manifest = "\"" + file("desktop/src/main/manifest").absolutePath + "\""
@@ -119,6 +125,7 @@ object Tasks {
       "-injars", classfiles,
       "-injars", inJars,
       "-injars", manifest,
+      "-libraryjars", libraryJars,
       "-outjars", outfile)
    
     s.log.info("preparing proguarded assembly")
