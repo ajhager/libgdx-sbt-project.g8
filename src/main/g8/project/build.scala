@@ -31,7 +31,8 @@ object Settings {
     resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
     libraryDependencies ++= Seq(
       "com.badlogicgames.gdx" % "gdx" % "$libgdx_version$"
-    )
+    ),
+    cancelable := true
   )
 
   lazy val desktop = common ++ assemblySettings ++ Seq(
