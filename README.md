@@ -40,16 +40,6 @@ Run the ios project on a device:
 
 Visit [sbt-robovm](https://github.com/ajhager/sbt-robovm) for a more in-depth guide to ios configuration and usage.
 
-## Using unit tests
-
-Run all unit tests from desktop, android and common (subdirectories src/test/scala):
-
-    > test
-
-Run specific set of unit tests:
-
-    > common/test
-
 ## Using with popular IDEs
 
 In most cases you will be able to open and edit each sub-project (like common, android or desktop), but you still need to use SBT to build the project.
