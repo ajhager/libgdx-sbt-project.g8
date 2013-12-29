@@ -9,24 +9,11 @@ import sbtassembly.Plugin._
 import AssemblyKeys._
 
 object Settings {
-  lazy val scalameter = new TestFramework("org.scalameter.ScalaMeterFramework")
-
   lazy val common = Defaults.defaultSettings ++ Seq(
     version := "0.1",
     scalaVersion := "$scala_version$",
     javacOptions ++= Seq("-encoding", "UTF-8", "-source", "1.6", "-target", "1.6"),
     scalacOptions ++= Seq("-Xlint", "-unchecked", "-deprecation", "-feature"),
-    libraryDependencies ++= Seq(
-      "org.scalacheck" %% "scalacheck" % "1.10.1" % "test",
-      "com.github.axel22" %% "scalameter" % "0.3" % "test",
-      "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test"
-    ),
-    parallelExecution in Test := false,
-    testFrameworks in Test += scalameter,
-    testOptions in Test ++= Seq(
-      Tests.Argument(scalameter, "-preJDK7"),
-      Tests.Argument(TestFrameworks.ScalaTest, "-o", "-u", "target/test-reports")
-    ),
     unmanagedBase <<= baseDirectory(_/"libs"),
     resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
     libraryDependencies ++= Seq(
