@@ -14,7 +14,9 @@ object Settings {
     version := "0.1",
     scalaVersion := "$scala_version$",
     javacOptions ++= Seq("-encoding", "UTF-8", "-source", "1.6", "-target", "1.6"),
-    scalacOptions ++= Seq("-Xlint", "-unchecked", "-deprecation", "-feature"),
+    scalacOptions ++= Seq("-encoding", "UTF-8", "-target:jvm-1.6"),
+    javacOptions += "-Xlint",
+    scalacOptions ++= Seq("-Xlint", "-Ywarn-dead-code", "-Ywarn-value-discard", "-Ywarn-numeric-widen", "-unchecked", "-deprecation", "-feature"),
     resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
     libraryDependencies ++= Seq(
       "com.badlogicgames.gdx" % "gdx" % "$libgdx_version$"
