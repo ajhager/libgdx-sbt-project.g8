@@ -2,6 +2,6 @@ package $package$
 
 import com.badlogic.gdx.Game
 
-class $main_class$ extends Game {
+class $name;format="Camel"$ extends Game {
     override def create() {}
 }

@@ -12,14 +12,14 @@ import com.badlogic.gdx.graphics.GL20
 
 class Main extends IOSApplication.Delegate {
   override protected def createApplication(): IOSApplication = {
-    val config = new IOSApplicationConfiguration()
-    return new IOSApplication(new $main_class$(), config)
+    val config = new IOSApplicationConfiguration
+    new IOSApplication(new $name;format="Camel"$, config)
   }
 }
 
 object Main {
   def main(args: Array[String]) {
-      val pool = new NSAutoreleasePool()
+      val pool = new NSAutoreleasePool
       UIApplication.main(args, null, classOf[Main])
       pool.drain()
   }
