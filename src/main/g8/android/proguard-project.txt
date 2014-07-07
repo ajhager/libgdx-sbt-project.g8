@@ -1,0 +1,54 @@
+# Keep Android backend
+-keep class com.badlogic.gdx.backends.android.** { *; }
+
+-keep public class com.badlogic.gdx.backends.android.AndroidVisibilityListener {
+ public void createListener(com.badlogic.gdx.backends.android.AndroidApplication);
+}
+
+# Port from proguard-android.txt
+
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-dontoptimize
+-dontpreverify
+
+-keepattributes *Annotation*
+-keep public class com.google.vending.licensing.ILicensingService
+-keep public class com.android.vending.licensing.ILicensingService
+
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+-keepclassmembers public class * extends android.view.View {
+   void set*(***);
+   *** get*();
+}
+
+-keepclassmembers class * extends android.app.Activity {
+   public void *(android.view.View);
+}
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+} 
+
+-keep class * implements android.os.Parcelable {
+  public static final android.os.Parcelable\$Creator *;
+} 
+
+-keepclassmembers class **.R\$* {
+    public static <fields>;
+} 
+
+-dontwarn android.support.**
+
+# Port from proguard-project.txt of Libgdx template
+
+-dontwarn com.badlogic.gdx.backends.android.AndroidFragmentApplication
+
+-keepclassmembers class com.badlogic.gdx.backends.android.AndroidInput* {
+   <init>(com.badlogic.gdx.Application, android.content.Context, java.lang.Object, com.badlogic.gdx.backends.android.AndroidApplicationConfiguration);
+}
+

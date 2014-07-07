@@ -8,7 +8,6 @@
 
 # Keep LWJGL backend
 -keep class com.badlogic.gdx.backends.lwjgl.** { *; }
--keep class com.badlogic.gdx.backends.openal.** { *; }
 -keep class org.lwjgl.** { *; }
 
 # keep controller related classes
@@ -30,8 +29,8 @@
 # functions. It includes cases like having multiple definitions for GL 1 and 2.
 # same goes for libgdx OpenAL audio, that dynamically uses proper decoder for
 # music files.
--dontnote org.lwjgl.**
--dontnote com.badlogic.gdx.backends.openal.OpenALAudio
+-dontwarn org.lwjgl.**
+-dontnote com.badlogic.gdx.backends.lwjgl.audio.OpenALAudio
 
 # Settings mirrored from sbt-android
 -dontoptimize

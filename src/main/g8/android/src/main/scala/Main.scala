@@ -11,7 +11,6 @@ class Main extends AndroidApplication {
     config.useCompass = false
     config.useWakelock = true
     config.hideStatusBar = true
-    config.useGL20 = true
     initialize(new $name;format="Camel"$, config)
   }
 }
