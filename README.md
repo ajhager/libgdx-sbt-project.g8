@@ -28,17 +28,11 @@ Package the desktop project into single jar:
 
     > assembly
 
-Run the android project on a device:
+Create Android package in debug mode:
   
-    > android/start
+    > android:packageDebug
 
-Visit [android-plugin](https://github.com/jberkel/android-plugin) for a more in-depth guide to android configuration and usage.
-
-Run the ios project on a device:
-
-    > ios/device
-
-Visit [sbt-robovm](https://github.com/ajhager/sbt-robovm) for a more in-depth guide to ios configuration and usage.
+Visit [android-sdk-plugin](https://github.com/pfn/android-sdk-plugin) for a more in-depth guide to android configuration and usage.
 
 ## Using with popular IDEs
 
