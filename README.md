@@ -1,6 +1,6 @@
 # libgdx sbt project
 
-Configure and generate a Scala project for [libgdx](http://libgdx.badlogicgames.com/) using [g8](http://github.com/n8han/giter8) and [sbt](https://github.com/sbt/sbt) 0.12.
+Configure and generate a Scala project for [libgdx](http://libgdx.badlogicgames.com/) using [g8](http://github.com/n8han/giter8) and [sbt](http://www.scala-sbt.org/) 0.13.5+.
 
 ## Setting up a new project
 
@@ -11,14 +11,13 @@ Then, in your favorite shell, type the command:
 
     $ g8 ajhager/libgdx-sbt-project
 
-After filling in some information about your project, you can start placing your game's source files and assets in common/src/main/scala and common/src/main/resources, respectively.
+After filling in some information about your project, you can start placing your game's source files and assets in core/src/main/scala and android/assets respectively.
 
 ## Managing your project
 
-Update to the lastest libraries:
+Start `sbt` in project root:
 
     $ sbt
-    > update
 
 Run the desktop project:
 
