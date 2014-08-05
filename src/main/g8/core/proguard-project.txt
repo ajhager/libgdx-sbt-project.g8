@@ -82,3 +82,10 @@
    float   reportRayFixture(long, float, float, float, float, float);
 }
 
+# see https://github.com/ajhager/libgdx-sbt-project.g8/issues/85
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+

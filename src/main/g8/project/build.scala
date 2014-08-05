@@ -5,6 +5,8 @@ import android.Keys._
 import android.Plugin.androidBuild
 
 object Settings {
+  import LibgdxBuild.libgdxVersion
+
   lazy val nativeExtractions = SettingKey[Seq[(String, NameFilter, File)]](
     "native-extractions", "(jar name partial, sbt.NameFilter of files to extract, destination directory)"
   )
@@ -12,10 +14,11 @@ object Settings {
   lazy val desktopJarName = SettingKey[String]("desktop-jar-name", "name of JAR file for desktop")
 
   lazy val core = plugins.JvmPlugin.projectSettings ++ Seq(
-    version := "0.1",
-    scalaVersion := "$scala_version$",
+    version := (version in LocalProject("all-platforms")).value,
+    libgdxVersion := (libgdxVersion in LocalProject("all-platforms")).value,
+    scalaVersion := (scalaVersion in LocalProject("all-platforms")).value,
     libraryDependencies ++= Seq(
-      "com.badlogicgames.gdx" % "gdx" % "$libgdx_version$"
+      "com.badlogicgames.gdx" % "gdx" % libgdxVersion.value
     ),
     javacOptions ++= Seq(
       "-Xlint",
@@ -43,8 +46,8 @@ object Settings {
   lazy val desktop = core ++ Seq(
     libraryDependencies ++= Seq(
       "net.sf.proguard" % "proguard-base" % "4.11" % "provided",
-      "com.badlogicgames.gdx" % "gdx-backend-lwjgl" % "$libgdx_version$",
-      "com.badlogicgames.gdx" % "gdx-platform" % "$libgdx_version$" classifier "natives-desktop"
+      "com.badlogicgames.gdx" % "gdx-backend-lwjgl" % libgdxVersion.value,
+      "com.badlogicgames.gdx" % "gdx-platform" % libgdxVersion.value classifier "natives-desktop"
     ),
     fork in Compile := true,
     unmanagedResourceDirectories in Compile += file("android/assets"),
@@ -54,10 +57,10 @@ object Settings {
 
   lazy val android = core ++ Tasks.natives ++ androidBuild ++ Seq(
     libraryDependencies ++= Seq(
-      "com.badlogicgames.gdx" % "gdx-backend-android" % "$libgdx_version$",
-      "com.badlogicgames.gdx" % "gdx-platform" % "$libgdx_version$" % "natives" classifier "natives-armeabi",
-      "com.badlogicgames.gdx" % "gdx-platform" % "$libgdx_version$" % "natives" classifier "natives-armeabi-v7a",
-      "com.badlogicgames.gdx" % "gdx-platform" % "$libgdx_version$" % "natives" classifier "natives-x86"
+      "com.badlogicgames.gdx" % "gdx-backend-android" % libgdxVersion.value,
+      "com.badlogicgames.gdx" % "gdx-platform" % libgdxVersion.value % "natives" classifier "natives-armeabi",
+      "com.badlogicgames.gdx" % "gdx-platform" % libgdxVersion.value % "natives" classifier "natives-armeabi-v7a",
+      "com.badlogicgames.gdx" % "gdx-platform" % libgdxVersion.value % "natives" classifier "natives-x86"
     ),
     nativeExtractions <<= (baseDirectory) { base => Seq(
       ("natives-armeabi.jar", new ExactFilter("libgdx.so"), base / "libs" / "armeabi"),
@@ -132,6 +135,8 @@ object Tasks {
 }
 
 object LibgdxBuild extends Build {
+  lazy val libgdxVersion = settingKey[String]("version of Libgdx library")
+
   lazy val core = Project(
     id       = "core",
     base     = file("core"),
