@@ -29,7 +29,7 @@ Package the desktop project into single jar:
 
 Create Android package in debug mode:
   
-    > android:packageDebug
+    > android:package-debug
 
 Visit [android-sdk-plugin](https://github.com/pfn/android-sdk-plugin) for a more in-depth guide to android configuration and usage.
 
