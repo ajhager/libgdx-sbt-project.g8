@@ -4,6 +4,11 @@ import Keys._
 import android.Keys._
 import android.Plugin.androidBuild
 
+class CustomLayout(override val base: File) extends ProjectLayout.Ant(base) {
+  override def sources = base / "src/main/scala"
+  override def testSources = base / "src/test/scala"
+}
+
 object Settings {
   import LibgdxBuild.libgdxVersion
 
@@ -57,9 +62,7 @@ object Settings {
   )
 
   lazy val android = core ++ Tasks.natives ++ androidBuild ++ Seq(
-    scalaSource in Compile := baseDirectory.value / "src/main/scala",
-    scalaSource in Test := baseDirectory.value / "src/test//scala",
-
+    projectLayout in Android := new CustomLayout(baseDirectory.value),
     libraryDependencies ++= Seq(
       "com.badlogicgames.gdx" % "gdx-backend-android" % libgdxVersion.value,
       "com.badlogicgames.gdx" % "gdx-platform" % libgdxVersion.value % "natives" classifier "natives-armeabi",
