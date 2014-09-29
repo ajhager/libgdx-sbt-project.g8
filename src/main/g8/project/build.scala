@@ -63,6 +63,7 @@ object Settings {
 
   lazy val android = core ++ Tasks.natives ++ androidBuild ++ Seq(
     projectLayout in Android := new CustomLayout(baseDirectory.value),
+    debugIncludesTests in Android := false,
     libraryDependencies ++= Seq(
       "com.badlogicgames.gdx" % "gdx-backend-android" % libgdxVersion.value,
       "com.badlogicgames.gdx" % "gdx-platform" % libgdxVersion.value % "natives" classifier "natives-armeabi",
