@@ -4,6 +4,11 @@ import Keys._
 import android.Keys._
 import android.Plugin.androidBuild
 
+class CustomLayout(override val base: File) extends ProjectLayout.Ant(base) {
+  override def sources = base / "src/main/scala"
+  override def testSources = base / "src/test/scala"
+}
+
 object Settings {
   import LibgdxBuild.libgdxVersion
 
@@ -18,7 +23,8 @@ object Settings {
     libgdxVersion := (libgdxVersion in LocalProject("all-platforms")).value,
     scalaVersion := (scalaVersion in LocalProject("all-platforms")).value,
     libraryDependencies ++= Seq(
-      "com.badlogicgames.gdx" % "gdx" % libgdxVersion.value
+      "com.badlogicgames.gdx" % "gdx" % libgdxVersion.value,
+      "org.scalatest" % "scalatest_2.11" % "2.2.1" % "test"
     ),
     javacOptions ++= Seq(
       "-Xlint",
@@ -56,6 +62,8 @@ object Settings {
   )
 
   lazy val android = core ++ Tasks.natives ++ androidBuild ++ Seq(
+    projectLayout in Android := new CustomLayout(baseDirectory.value),
+    debugIncludesTests in Android := false,
     libraryDependencies ++= Seq(
       "com.badlogicgames.gdx" % "gdx-backend-android" % libgdxVersion.value,
       "com.badlogicgames.gdx" % "gdx-platform" % libgdxVersion.value % "natives" classifier "natives-armeabi",
