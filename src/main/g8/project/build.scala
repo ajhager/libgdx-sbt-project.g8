@@ -3,6 +3,7 @@ import Keys._
 
 import android.Keys._
 import android.Plugin.androidBuild
+import sbtrobovm.RobovmPlugin._
 
 object Settings {
   import LibgdxBuild.libgdxVersion
@@ -70,6 +71,24 @@ object Settings {
     platformTarget in Android := "android-$api_level$",
     proguardOptions in Android ++= scala.io.Source.fromFile(file("core/proguard-project.txt")).getLines.toList ++
                                    scala.io.Source.fromFile(file("android/proguard-project.txt")).getLines.toList
+  )
+
+  lazy val ios = core ++ Tasks.natives ++ Seq(
+    unmanagedResources in Compile <++= (baseDirectory) map { _ =>
+      (file("common/assets") ** "*").get
+    },
+    forceLinkClasses := Seq("com.badlogic.gdx.scenes.scene2d.ui.*"),
+    skipPngCrush := true,
+    iosInfoPlist <<= (sourceDirectory in Compile){ sd => Some(sd / "Info.plist") },
+    frameworks := Seq("UIKit", "OpenGLES", "QuartzCore", "CoreGraphics", "OpenAL", "AudioToolbox", "AVFoundation"),
+    nativePath <<= (baseDirectory){ bd => Seq(bd / "lib") },
+    libraryDependencies ++= Seq(
+      "com.badlogicgames.gdx" % "gdx-backend-robovm" % libgdxVersion.value,
+      "com.badlogicgames.gdx" % "gdx-platform" % libgdxVersion.value % "natives" classifier "natives-ios"
+    ),
+    nativeExtractions <<= (baseDirectory) { base => Seq(
+      ("natives-ios.jar", new ExactFilter("libgdx.a") | new ExactFilter("libObjectAL.a"), base / "lib")
+    )}
   )
 }
 
@@ -155,10 +174,16 @@ object LibgdxBuild extends Build {
     settings = Settings.android
   ).dependsOn(core)
 
+  lazy val ios = RobovmProject(
+    id       = "ios",
+    base     = file("ios"),
+    settings = Settings.ios
+  ).dependsOn(core)
+
   lazy val all = Project(
     id       = "all-platforms",
     base     = file("."),
     settings = Settings.core
-  ).aggregate(core, desktop, android)
+  ).aggregate(core, desktop, android, ios)
 }
 
