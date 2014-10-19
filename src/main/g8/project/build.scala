@@ -75,7 +75,7 @@ object Settings {
 
   lazy val ios = core ++ Tasks.natives ++ Seq(
     unmanagedResources in Compile <++= (baseDirectory) map { _ =>
-      (file("common/assets") ** "*").get
+      (file("android/assets") ** "*").get
     },
     forceLinkClasses := Seq("com.badlogic.gdx.scenes.scene2d.ui.*"),
     skipPngCrush := true,
