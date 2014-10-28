@@ -51,6 +51,7 @@ object Settings {
       "com.badlogicgames.gdx" % "gdx-platform" % libgdxVersion.value classifier "natives-desktop"
     ),
     fork in Compile := true,
+    baseDirectory in run := file("android/assets"),
     unmanagedResourceDirectories in Compile += file("android/assets"),
     desktopJarName := "$name;format="norm"$",
     Tasks.assembly
