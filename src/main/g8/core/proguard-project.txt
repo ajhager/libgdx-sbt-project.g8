@@ -4,11 +4,14 @@
 
 ## LibGDX
 
-# keep used
+-keep class com.badlogic.gdx.Application
 
-# This needs also descriptor classes
--keep public class com.badlogic.gdx.Screen
--keep public class com.badlogic.gdx.Application
+# Don't warn about optional
+
+-dontnote com.badlogic.gdx.physics.box2d.World
+
+# Needed descriptor classes
+
 -keep public class com.badlogic.gdx.ApplicationListener
 -keep public class com.badlogic.gdx.LifecycleListener
 -keep public class com.badlogic.gdx.InputProcessor
@@ -17,7 +20,6 @@
 -keep public class com.badlogic.gdx.Graphics\$DisplayMode
 -keep public class com.badlogic.gdx.Input\$TextInputListener
 -keep public class com.badlogic.gdx.Input\$Peripheral
--keep public class com.badlogic.gdx.Input\$Orientation
 -keep public class com.badlogic.gdx.Net\$HttpRequest
 -keep public class com.badlogic.gdx.Net\$HttpResponseListener
 -keep public class com.badlogic.gdx.Net\$Protocol
@@ -29,44 +31,69 @@
 
 ## Scala
 
-# Fix accesses to class members by means of introspection
--keepclassmembernames class scala.concurrent.forkjoin.ForkJoinPool {
-    ** ctl;
-    ** stealCount;
-    ** plock;
-    ** qlock;
-    ** indexSeed;
-    ** parkBlocker;
-}
--keepclassmembernames class scala.concurrent.forkjoin.ForkJoinPool\$WorkQueue {
-    ** qlock;
-}
--keepclassmembernames class scala.concurrent.forkjoin.ForkJoinTask {
-    ** status;
-}
--keepclassmembernames class scala.concurrent.forkjoin.LinkedTransferQueue {
-    ** head;
-    ** tail;
-    ** sweepVotes;
-}
--keepclassmembernames class scala.concurrent.forkjoin.LinkedTransferQueue\$Node {
-    ** item;
-    ** next;
-    ** waiter;
-}
+# See http://blog.scaloid.org/2014/10/scaloid-36-is-released.html
 
-# See bug https://issues.scala-lang.org/browse/SI-5397
--keep class scala.collection.SeqLike { public protected *; }
-# This needs also descriptor classes
--keep public class scala.Function1
--keep public class scala.Function2
--keep public class scala.collection.GenSeq
--keep public class scala.collection.generic.CanBuildFrom
--keep public class scala.math.Ordering
+-keepattributes Signature
+-dontwarn scala.collection.**
 
-# port from Libgdx template
+# Port of Android rules from android-proguard.config (android-sdk-plugin)
 
+-dontobfuscate
+-dontoptimize
+-renamesourcefileattribute SourceFile
+-keepattributes SourceFile,LineNumberTable
 -verbose
+-flattenpackagehierarchy
+
+-dontnote scala.ScalaObject
+-dontnote org.xml.sax.EntityResolver
+-dontnote scala.concurrent.forkjoin.**
+-dontwarn scala.beans.ScalaBeanInfo
+-dontwarn scala.concurrent.**
+-dontnote scala.reflect.**
+-dontwarn scala.reflect.**
+-dontwarn scala.sys.process.package\$
+
+-dontwarn **\$\$anonfun\$*
+-dontwarn scala.collection.immutable.RedBlack\$Empty
+-dontwarn scala.tools.**,plugintemplate.**
+
+-keep public class scala.reflect.ScalaSignature
+-keep public interface scala.ScalaObject
+
+-keepclassmembers class * {
+    ** MODULE\$;
+}
+
+-keep class scala.collection.SeqLike {
+    public java.lang.String toString();
+}
+
+-keepclassmembernames class scala.concurrent.forkjoin.ForkJoinPool {
+    long eventCount;
+    int workerCounts;
+    int runControl;
+    scala.concurrent.forkjoin.ForkJoinPool\$WaitQueueNode syncStack;
+    scala.concurrent.forkjoin.ForkJoinPool\$WaitQueueNode spareStack;
+}
+
+-keepclassmembernames class scala.concurrent.forkjoin.ForkJoinWorkerThread {
+    int base;
+    int sp;
+    int runState;
+}
+
+-keepclassmembernames class scala.concurrent.forkjoin.ForkJoinTask {
+    int status;
+}
+
+-keepclassmembernames class scala.concurrent.forkjoin.LinkedTransferQueue {
+    scala.concurrent.forkjoin.LinkedTransferQueue\$PaddedAtomicReference head;
+    scala.concurrent.forkjoin.LinkedTransferQueue\$PaddedAtomicReference tail;
+    scala.concurrent.forkjoin.LinkedTransferQueue\$PaddedAtomicReference cleanMe;
+}
+
+# Port of LibGDX rules from proguard-project.txt (LibGDX template)
 
 -dontwarn com.badlogic.gdx.utils.GdxBuild
 -dontwarn com.badlogic.gdx.physics.box2d.utils.Box2DBuild
@@ -82,10 +109,10 @@
    float   reportRayFixture(long, float, float, float, float, float);
 }
 
-# see https://github.com/ajhager/libgdx-sbt-project.g8/issues/85
-
 -keepclassmembers enum * {
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
+
+-keepattributes *Annotation*
 
