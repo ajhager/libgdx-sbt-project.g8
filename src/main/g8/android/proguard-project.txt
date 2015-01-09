@@ -1,18 +1,19 @@
 # Keep Android backend
+
 -keep class com.badlogic.gdx.backends.android.** { *; }
 
--keep public class com.badlogic.gdx.backends.android.AndroidVisibilityListener {
- public void createListener(com.badlogic.gdx.backends.android.AndroidApplication);
-}
+# Needed descriptor classes
 
-# Port from proguard-android.txt
+-keep public class com.badlogic.gdx.Input\$Orientation
+
+# Port of Android rules from android-proguard.config (android-sdk-plugin)
 
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
--dontoptimize
 -dontpreverify
 
--keepattributes *Annotation*
+-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*,!code/allocation/variable
+
 -keep public class com.google.vending.licensing.ILicensingService
 -keep public class com.android.vending.licensing.ILicensingService
 
@@ -20,35 +21,35 @@
     native <methods>;
 }
 
--keepclassmembers public class * extends android.view.View {
-   void set*(***);
-   *** get*();
-}
-
 -keepclassmembers class * extends android.app.Activity {
-   public void *(android.view.View);
+    public void *(android.view.View);
 }
-
--keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-} 
 
 -keep class * implements android.os.Parcelable {
-  public static final android.os.Parcelable\$Creator *;
+    public static final android.os.Parcelable\$Creator *;
 } 
+
+-dontnote android.annotation.**
+-dontnote com.android.vending.licensing.**
+-dontnote com.google.vending.licensing.**
+-dontwarn android.support.**
+-dontnote android.support.**
+
+-keepclassmembers public class * extends android.view.View {
+    void set*(***);
+    *** get*();
+}
 
 -keepclassmembers class **.R\$* {
     public static <fields>;
-} 
+}
+
+# Port of Android rules from proguard-project.txt (LibGDX template)
 
 -dontwarn android.support.**
-
-# Port from proguard-project.txt of Libgdx template
-
 -dontwarn com.badlogic.gdx.backends.android.AndroidFragmentApplication
 
 -keepclassmembers class com.badlogic.gdx.backends.android.AndroidInput* {
-   <init>(com.badlogic.gdx.Application, android.content.Context, java.lang.Object, com.badlogic.gdx.backends.android.AndroidApplicationConfiguration);
+    <init>(com.badlogic.gdx.Application, android.content.Context, java.lang.Object, com.badlogic.gdx.backends.android.AndroidApplicationConfiguration);
 }
 

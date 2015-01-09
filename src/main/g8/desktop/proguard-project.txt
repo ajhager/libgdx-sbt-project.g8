@@ -1,52 +1,82 @@
-# Inform ProGuard about Java Runtime
+## Inform ProGuard about Java Runtime
+
 -libraryjars <java.home>/lib/rt.jar
 
-# keep main method
+## Keep main method
+
 -keepclasseswithmembers public class $package$.Main {
     public static void main(java.lang.String[]);
 }
 
-# Keep LWJGL backend
+## Keep LWJGL backend
+
 -keep class com.badlogic.gdx.backends.lwjgl.** { *; }
 -keep class org.lwjgl.** { *; }
 
-# keep controller related classes
--keep class net.java.games.input.Component\$Identifier { *; }
--keep class net.java.games.input.Component { *; }
--keep class net.java.games.input.Controller { *; }
--keep class net.java.games.input.Rumbler { *; }
--keep class net.java.games.input.Event { *; }
--keep class net.java.games.input.ControllerListener { *; }
--keep class net.java.games.input.ControllerEvent { *; }
--keep class net.java.games.input.Component\$Identifier\$Key { *; }
+# Keep controller related classes
 
-# used by LWJGL to open web browser, by libgdx to detect when it runs in javaws
-# in both cases it is guarded and will be provided by java library
--dontnote javax.jnlp.**
--dontnote com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader
+-keep public class net.java.games.input.Controller
+-keep public class net.java.games.input.ControllerListener
+-keep public class net.java.games.input.Component
+-keep public class net.java.games.input.Component\$Identifier
+-keep public class net.java.games.input.Component\$Identifier\$Button
+-keep public class net.java.games.input.Component\$Identifier\$Axis
+-keep public class net.java.games.input.Component\$Identifier\$Key
+-keep public class net.java.games.input.Event
+-keep public class net.java.games.input.Rumbler
 
-# all notes from LWJGL comes from dynamically calling its own or java library
-# functions. It includes cases like having multiple definitions for GL 1 and 2.
-# same goes for libgdx OpenAL audio, that dynamically uses proper decoder for
-# music files.
--dontwarn org.lwjgl.**
--dontnote com.badlogic.gdx.backends.lwjgl.audio.OpenALAudio
+# Keep util related classes
 
-# Settings mirrored from sbt-android
--dontoptimize
--dontwarn
--dontobfuscate
-
--dontnote scala.Enumeration
--dontnote org.xml.sax.EntityResolver
-
--keep class scala.reflect.ScalaSignature
-
--keepclassmembers class * implements java.io.Serializable {
-    private static final java.io.ObjectStreamField[] serialPersistentFields;
-    private void writeObject(java.io.ObjectOutputStream);
-    private void readObject(java.io.ObjectInputStream);
-    java.lang.Object writeReplace();
-    java.lang.Object readResolve();
+-keepclassmembers class java.lang.ClassLoader {
+    java.lang.String findLibrary(java.lang.String);
 }
+
+# Keep sound related classes
+
+-keepclassmembers class org.lwjgl.openal.* {
+    void initNativeStubs();
+}
+
+-keepclassmembers class com.badlogic.gdx.backends.lwjgl.audio.* {
+    <init>(com.badlogic.gdx.backends.lwjgl.audio.OpenALAudio,com.badlogic.gdx.files.FileHandle);
+}
+
+# Keep graphics related classes
+
+-keepclassmembers class org.lwjgl.opengl.CallbackUtil {
+    long getDebugCallbackKHR();
+    long getDebugOutputCallbackARB();
+    long getDebugOutputCallbackAMD();
+}
+
+-keepclassmembers class org.lwjgl.opengl.GlobalLock {
+    java.lang.Object lock;
+}
+
+-keep public class * extends java.awt.GraphicsDevice { *; }
+
+# Keep platforms related classes
+
+-keepclassmembers class org.lwjgl.opengl.WindowsDisplay {
+    long getHwnd();
+}
+
+# LibGDX on desktop runs emulated OpenGL, so OpenGL ES it isn't included nor used
+
+-dontwarn org.lwjgl.opengles.**
+
+# Seems that org.lwjgl.util.mapped is not used in Libgdx, so we can ignore warnings from it (about missing ASM)
+
+-dontwarn org.lwjgl.util.mapped.**
+-dontnote org.lwjgl.util.mapped.**
+
+# This is available only on one platform, and surely provided by it
+
+-dontwarn com.apple.eio.**
+-dontnote org.lwjgl.opengl.LinuxCanvasImplementation*
+
+# There are some classes using JNLP (networked launching isn't supported by our project template for now)
+
+-dontnote com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader # lookup from javax.jnlp.ServiceManager
+-dontnote org.lwjgl.Sys*   # lookup from javax.jnlp.ServiceManager and showDocument from javax.jnlp.BasicService
 
