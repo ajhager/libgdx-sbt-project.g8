@@ -15,6 +15,7 @@ object Settings {
   lazy val desktopJarName = SettingKey[String]("desktop-jar-name", "name of JAR file for desktop")
 
   lazy val core = plugins.JvmPlugin.projectSettings ++ Seq(
+    scalaSource in Test := new File("core/src/test"),
     version := (version in LocalProject("all-platforms")).value,
     libgdxVersion := (libgdxVersion in LocalProject("all-platforms")).value,
     scalaVersion := (scalaVersion in LocalProject("all-platforms")).value,
